@@ -226,6 +226,14 @@ table.data tr.total td{background:var(--bg3);color:var(--text);font-weight:600}
 .svg-lab{font-family:'Space Mono',monospace;font-size:11px;fill:var(--text3)}
 .svg-val{font-family:'Space Mono',monospace;font-size:12px;fill:var(--text)}
 .svg-warn{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;fill:var(--orange)}
+.svg-fill-a{fill:rgba(63,201,168,.20)}
+.svg-fill-b{fill:rgba(240,168,92,.22)}
+.svg-fill-c{fill:rgba(238,242,248,.09)}
+.svg-edge{stroke:var(--border2);stroke-width:1.5;fill:none}
+.svg-line{stroke:var(--accent);stroke-width:2.5;fill:none}
+.svg-line-b{stroke:var(--orange);stroke-width:2.5;fill:none}
+.svg-pt{fill:var(--text)}
+.theorie .figure{background:var(--bg)}
 
 .options{display:grid;gap:10px}
 .option{
@@ -404,15 +412,15 @@ table.data tr.total td{background:var(--bg3);color:var(--text);font-weight:600}
     <p class="lead">Tableaux de données, moyennes, graphiques. C'est la partie du test qui ressemble le plus au métier : une jauge, une recette, un taux de remplissage, une courbe de fréquentation, ça se lit tous les jours dans une salle.</p>
 
     <ul class="objectifs">
-      <li>4 étapes courtes, 16 questions au total</li>
-      <li>Environ 35 minutes, et tu peux t'arrêter entre deux étapes</li>
+      <li>4 étapes courtes, 24 questions au total</li>
+      <li>Environ 45 minutes en tout, et tu peux t'arrêter entre deux étapes</li>
       <li>Un rappel de cours avant chaque série — rien à réviser avant</li>
       <li>Un indice disponible à tout moment, sans pénalité</li>
       <li>À la fin : une fiche des points à travailler, imprimable</li>
     </ul>
 
     <div class="note-doux">
-      <strong>Ce module n'est pas une évaluation.</strong> Il sert à repérer ce qui est déjà là et ce qui demande un coup de main. Une réponse fausse ici, c'est une information utile — pas une erreur. Tu peux refaire n'importe quelle étape autant de fois que tu veux, dans l'ordre que tu veux.
+      <strong>Ce module n'est pas une évaluation.</strong> Il sert à repérer ce qui est déjà là et ce qui demande un coup de main. Une réponse fausse ici, c'est une information utile — pas une erreur.<br><br>Chaque étape se fait en une dizaine de minutes. Tu peux t'arrêter entre deux, et refaire n'importe laquelle autant de fois que tu veux.
     </div>
 
     <div class="btn-row">
@@ -490,7 +498,7 @@ table.data tr.total td{background:var(--bg3);color:var(--text);font-weight:600}
 <!-- ========================= BILAN FINAL ========================= -->
 <section id="scr-final" class="screen">
   <div class="card">
-    <div class="eyebrow">Module 2 terminé · Lire les chiffres</div>
+    <div class="eyebrow">Module 2 — Lire les chiffres — terminé</div>
     <h1 id="fin-titre">Ta fiche de synthèse</h1>
     <p class="lead" id="fin-lead" style="margin-top:10px"></p>
 
@@ -515,25 +523,27 @@ table.data tr.total td{background:var(--bg3);color:var(--text);font-weight:600}
 </section>
 
 </div>
+
 <script>
 /* ============================================================
-   CONTENU PÉDAGOGIQUE — MODULE 2
+   CONTENU PÉDAGOGIQUE — MODULE 2  (v2)
+   Règle de rédaction : aucun exemple du rappel ne doit
+   reprendre les nombres d'une question de la même étape.
    ============================================================ */
 
-/* Tableau de billetterie réutilisé dans plusieurs questions */
 const TAB_SEMAINE = `
 <table class="data">
   <thead>
     <tr><th>Soir</th><th>Plein tarif</th><th>Tarif réduit</th><th>Étudiant</th><th>Total du soir</th></tr>
   </thead>
   <tbody>
-    <tr><td>Mardi</td><td class="num">60</td><td class="num">30</td><td class="num">20</td><td class="num">110</td></tr>
-    <tr><td>Mercredi</td><td class="num">72</td><td class="num">38</td><td class="num">30</td><td class="num">140</td></tr>
-    <tr><td>Jeudi</td><td class="num">85</td><td class="num">45</td><td class="num">30</td><td class="num">160</td></tr>
-    <tr><td>Vendredi</td><td class="num">120</td><td class="num">50</td><td class="num">40</td><td class="num">210</td></tr>
-    <tr><td>Samedi</td><td class="num">140</td><td class="num">60</td><td class="num">40</td><td class="num">240</td></tr>
-    <tr><td>Dimanche</td><td class="num">63</td><td class="num">47</td><td class="num">30</td><td class="num">140</td></tr>
-    <tr class="total"><td>Total</td><td class="num">540</td><td class="num">270</td><td class="num">190</td><td class="num">1 000</td></tr>
+    <tr><td>Mardi</td><td class="num">60</td><td class="num">30</td><td class="num">10</td><td class="num">100</td></tr>
+    <tr><td>Mercredi</td><td class="num">80</td><td class="num">40</td><td class="num">10</td><td class="num">130</td></tr>
+    <tr><td>Jeudi</td><td class="num">90</td><td class="num">45</td><td class="num">15</td><td class="num">150</td></tr>
+    <tr><td>Vendredi</td><td class="num">130</td><td class="num">60</td><td class="num">20</td><td class="num">210</td></tr>
+    <tr><td>Samedi</td><td class="num">150</td><td class="num">75</td><td class="num">25</td><td class="num">250</td></tr>
+    <tr><td>Dimanche</td><td class="num">90</td><td class="num">50</td><td class="num">20</td><td class="num">160</td></tr>
+    <tr class="total"><td>Total</td><td class="num">600</td><td class="num">300</td><td class="num">100</td><td class="num">1 000</td></tr>
   </tbody>
 </table>`;
 
@@ -543,9 +553,9 @@ const TAB_TARIFS = `
     <tr><th>Catégorie</th><th>Prix de la place</th><th>Places vendues</th></tr>
   </thead>
   <tbody>
-    <tr><td>Plein tarif</td><td class="num">22 €</td><td class="num">540</td></tr>
-    <tr><td>Tarif réduit</td><td class="num">16 €</td><td class="num">270</td></tr>
-    <tr><td>Tarif étudiant</td><td class="num">10 €</td><td class="num">190</td></tr>
+    <tr><td>Plein tarif</td><td class="num">22 €</td><td class="num">600</td></tr>
+    <tr><td>Tarif réduit</td><td class="num">16 €</td><td class="num">300</td></tr>
+    <tr><td>Tarif étudiant</td><td class="num">10 €</td><td class="num">100</td></tr>
     <tr class="total"><td>Total</td><td class="num">—</td><td class="num">1 000</td></tr>
   </tbody>
 </table>`;
@@ -556,7 +566,7 @@ const TAB_SOIRS = `
     <tr><th>Mardi</th><th>Mercredi</th><th>Jeudi</th><th>Vendredi</th><th>Samedi</th><th>Dimanche</th></tr>
   </thead>
   <tbody>
-    <tr><td class="num">110</td><td class="num">140</td><td class="num">160</td><td class="num">210</td><td class="num">240</td><td class="num">140</td></tr>
+    <tr><td class="num">100</td><td class="num">130</td><td class="num">150</td><td class="num">210</td><td class="num">250</td><td class="num">160</td></tr>
   </tbody>
 </table>`;
 
@@ -564,22 +574,22 @@ const TAB_SOIRS = `
 const FIG_SAISONS = `
 <div class="figure">
   <div class="fig-titre">Fréquentation annuelle · nombre de spectateurs</div>
-  <svg viewBox="0 0 480 250" role="img" aria-label="Diagramme en barres : saison 1, 6800 spectateurs ; saison 2, 7400 ; saison 3, 8600 ; saison 4, 8000 ; saison 5, 9200.">
+  <svg viewBox="0 0 480 250" role="img" aria-label="Diagramme en barres : saison 1, 5000 spectateurs ; saison 2, 6000 ; saison 3, 7500 ; saison 4, 6000 ; saison 5, 6900.">
     <line class="svg-grid" x1="46" y1="120" x2="466" y2="120"></line>
     <line class="svg-grid" x1="46" y1="40" x2="466" y2="40"></line>
     <text class="svg-lab" x="40" y="204" text-anchor="end">0</text>
-    <text class="svg-lab" x="40" y="124" text-anchor="end">5 000</text>
-    <text class="svg-lab" x="40" y="44" text-anchor="end">10 000</text>
-    <rect class="svg-bar" x="66"  y="91.2" width="56" height="108.8" rx="3"></rect>
-    <rect class="svg-bar" x="146" y="81.6" width="56" height="118.4" rx="3"></rect>
-    <rect class="svg-bar" x="226" y="62.4" width="56" height="137.6" rx="3"></rect>
-    <rect class="svg-bar" x="306" y="72"   width="56" height="128"   rx="3"></rect>
-    <rect class="svg-bar" x="386" y="52.8" width="56" height="147.2" rx="3"></rect>
-    <text class="svg-val" x="94"  y="84"  text-anchor="middle">6 800</text>
-    <text class="svg-val" x="174" y="74"  text-anchor="middle">7 400</text>
-    <text class="svg-val" x="254" y="55"  text-anchor="middle">8 600</text>
-    <text class="svg-val" x="334" y="65"  text-anchor="middle">8 000</text>
-    <text class="svg-val" x="414" y="45"  text-anchor="middle">9 200</text>
+    <text class="svg-lab" x="40" y="124" text-anchor="end">4 000</text>
+    <text class="svg-lab" x="40" y="44" text-anchor="end">8 000</text>
+    <rect class="svg-bar" x="66"  y="100" width="56" height="100" rx="3"></rect>
+    <rect class="svg-bar" x="146" y="80"  width="56" height="120" rx="3"></rect>
+    <rect class="svg-bar" x="226" y="50"  width="56" height="150" rx="3"></rect>
+    <rect class="svg-bar" x="306" y="80"  width="56" height="120" rx="3"></rect>
+    <rect class="svg-bar" x="386" y="62"  width="56" height="138" rx="3"></rect>
+    <text class="svg-val" x="94"  y="93" text-anchor="middle">5 000</text>
+    <text class="svg-val" x="174" y="73" text-anchor="middle">6 000</text>
+    <text class="svg-val" x="254" y="43" text-anchor="middle">7 500</text>
+    <text class="svg-val" x="334" y="73" text-anchor="middle">6 000</text>
+    <text class="svg-val" x="414" y="55" text-anchor="middle">6 900</text>
     <path class="svg-axis" d="M46 36 L46 200 L466 200"></path>
     <text class="svg-lab" x="94"  y="219" text-anchor="middle">Saison 1</text>
     <text class="svg-lab" x="174" y="219" text-anchor="middle">Saison 2</text>
@@ -622,27 +632,27 @@ const LEVELS = [
   sous:"Effectifs, totaux, fréquences, cumuls",
   theorie:`
     <h3>Avant de commencer</h3>
-    <p>Un tableau de billetterie, c'est d'abord une histoire de <strong>totaux</strong>. Cette semaine, la salle a vendu <strong>1 000 places</strong> : 540 au plein tarif, 270 au tarif réduit, 190 au tarif étudiant.</p>
-    <p>Le nombre de places d'une catégorie, c'est l'<strong>effectif</strong>. Sa part dans le total, c'est la <strong>fréquence</strong>.</p>
+    <p>Un tableau de billetterie, c'est d'abord une histoire de <strong>totaux</strong>. Le nombre de places d'une catégorie s'appelle l'<strong>effectif</strong> ; sa part dans le total s'appelle la <strong>fréquence</strong>.</p>
+    <p>Dans une petite salle qui a vendu 200 places sur la soirée, dont 50 au tarif réduit, la fréquence du tarif réduit se calcule ainsi :</p>
     <span class="formule">fréquence = effectif ÷ total
-270 ÷ 1 000 = 0,27  →  27 %</span>
+50 ÷ 200 = 0,25  →  25 %</span>
     <p>Trois points de vigilance qui reviennent sans arrêt dans les tests :</p>
     <ul>
       <li>un effectif se compte en places, une <strong>fréquence n'a pas d'unité</strong> (ou s'écrit en %) ;</li>
       <li>la somme de toutes les fréquences fait toujours <strong>100 %</strong> — c'est une façon de vérifier son travail ;</li>
-      <li>l'<strong>effectif cumulé</strong>, c'est le total depuis le début : les places vendues jusqu'au jeudi soir inclus, pas seulement celles du jeudi.</li>
+      <li>l'<strong>effectif cumulé</strong>, c'est le total depuis le début du tableau : les places vendues jusqu'à un soir donné <em>inclus</em>, et pas seulement celles de ce soir-là.</li>
     </ul>
-    <p>Et le piège classique : <strong>diviser par le bon total</strong>. « La part du plein tarif le samedi » se calcule sur le total du samedi, pas sur celui de la semaine.</p>`,
+    <p>Et le piège classique : <strong>diviser par le bon total</strong>. La part d'une catégorie <em>un soir précis</em> se calcule sur le total de ce soir-là, pas sur le total de la semaine.</p>`,
   questions:[
     {
       type:"qcm",
       contexte:"Bilan de billetterie, une semaine de représentations.",
       enonce:"Sur l'ensemble de la semaine, quelle <strong>part</strong> de la fréquentation le <strong>tarif réduit</strong> représente-t-il ?",
       tableau:TAB_SEMAINE,
-      options:["27 %","50 %","2,7 %","270 %"],
+      options:["30 %","50 %","3 %","300 %"],
       correct:0,
       indice:"Une fréquence se calcule toujours par rapport à un total. Ici, le total de quoi : du plein tarif, ou de toutes les places de la semaine ?",
-      explication:"270 places au tarif réduit sur 1 000 places vendues : 270 ÷ 1 000 = 0,27, soit <span class='rep'>27 %</span>. La réponse 50 % vient d'une comparaison avec le plein tarif — 270, c'est bien la moitié de 540 — et non avec le total. C'est l'erreur la plus fréquente sur ce type de tableau.",
+      explication:"300 places au tarif réduit sur 1 000 places vendues : 300 ÷ 1 000 = 0,3, soit <span class='rep'>30 %</span>. La réponse 50 % vient d'une comparaison avec le plein tarif — 300, c'est bien la moitié de 600 — et non avec le total. C'est l'erreur la plus fréquente sur ce type de tableau.",
       rappel:"Une fréquence se calcule par rapport au total, jamais par rapport à une autre catégorie."
     },
     {
@@ -651,9 +661,9 @@ const LEVELS = [
       enonce:"Combien de places ont été vendues <strong>en tout depuis le début de la semaine, jusqu'au jeudi soir inclus</strong> ?",
       tableau:TAB_SEMAINE,
       unite:"places",
-      reponse:410,
+      reponse:380,
       indice:"« Cumulé », ça veut dire depuis le début : le jeudi ne compte pas tout seul. Quels soirs faut-il additionner ?",
-      explication:"Mardi 110 + mercredi 140 + jeudi 160 = <span class='rep'>410 places</span>. La réponse 160 est l'effectif du jeudi seul : c'est un effectif, pas un effectif cumulé.",
+      explication:"Mardi 100 + mercredi 130 + jeudi 150 = <span class='rep'>380 places</span>. La réponse 150 est l'effectif du jeudi seul : c'est un effectif, pas un effectif cumulé.",
       rappel:"Un effectif cumulé s'additionne depuis la première ligne du tableau."
     },
     {
@@ -661,10 +671,10 @@ const LEVELS = [
       contexte:"Le samedi soir, la salle est presque pleine.",
       enonce:"Le <strong>samedi</strong>, quelle part des places vendues l'a été au <strong>plein tarif</strong> ?",
       tableau:TAB_SEMAINE,
-      options:["Environ 58 %","Environ 26 %","14 %","70 %"],
+      options:["60 %","25 %","15 %","40 %"],
       correct:0,
       indice:"Le samedi, combien de places ont été vendues en tout, toutes catégories confondues ? C'est ce nombre-là qui sert de total.",
-      explication:"Le samedi : 140 places au plein tarif sur 240 vendues. 140 ÷ 240 ≈ 0,583, soit <span class='rep'>environ 58 %</span>. Les autres réponses viennent toutes du mauvais total : 26 % de 140 ÷ 540 (le total de la colonne, donc toute la semaine au plein tarif), 14 % de 140 ÷ 1 000 (le total général), et 70 % de 140 ÷ 200 en oubliant la colonne étudiant.",
+      explication:"Le samedi : 150 places au plein tarif sur 250 vendues, soit 150 ÷ 250 = <span class='rep'>60 %</span>. Les autres réponses viennent toutes du mauvais total : 25 % de 150 ÷ 600 (le total de la colonne, donc toute la semaine au plein tarif) et 15 % de 150 ÷ 1 000 (le total général). Quant à 40 %, c'est la part de tout ce qui n'est <em>pas</em> au plein tarif ce soir-là.",
       rappel:"Avant de diviser, demande-toi : le total de la ligne, celui de la colonne, ou celui du tableau ?"
     },
     {
@@ -673,10 +683,32 @@ const LEVELS = [
       enonce:"Quelle <strong>recette</strong> la soirée du <strong>mardi</strong> a-t-elle rapportée ? Tu peux taper directement tout le calcul dans le champ.",
       tableau:TAB_SEMAINE,
       unite:"€",
-      reponse:2000,
+      reponse:1900,
       indice:"Chaque catégorie a son propre prix : trois multiplications d'abord, l'addition ensuite.",
-      explication:"60 × 22 = 1 320 €, 30 × 16 = 480 €, 20 × 10 = 200 €. Total : <span class='rep'>2 000 €</span>. Deux erreurs guettent ici : 110 × 22 = 2 420 € (le plein tarif appliqué à tout le monde) et 110 × 16 = 1 760 € (la moyenne des trois tarifs — on verra à l'étape suivante pourquoi ça ne marche pas).",
+      explication:"60 × 22 = 1 320 €, 30 × 16 = 480 €, 10 × 10 = 100 €. Total : <span class='rep'>1 900 €</span>. Deux erreurs guettent ici : 100 × 22 = 2 200 € (le plein tarif appliqué à tout le monde) et 100 × 16 = 1 600 € (la moyenne des trois tarifs — on verra à l'étape suivante pourquoi ça ne marche pas).",
       rappel:"Quand les prix diffèrent, on multiplie catégorie par catégorie avant d'additionner."
+    },
+    {
+      type:"num",
+      contexte:"Le vendredi, première grosse soirée du week-end.",
+      enonce:"Quel <strong>pourcentage</strong> de la fréquentation de la semaine le <strong>vendredi</strong> représente-t-il ?",
+      tableau:TAB_SEMAINE,
+      unite:"%",
+      reponse:21,
+      indice:"Cette fois, c'est bien le total de la semaine qui sert de référence. Où le lis-tu dans le tableau ?",
+      explication:"210 places le vendredi sur 1 000 places dans la semaine : 210 ÷ 1 000 = 0,21, soit <span class='rep'>21 %</span>. Quand le total vaut 1 000, le passage au pourcentage est immédiat — c'est un cas confortable, mais ne compte pas dessus le jour du test.",
+      rappel:"Part ÷ total × 100, exactement comme les pourcentages du module 1."
+    },
+    {
+      type:"qcm",
+      contexte:"Le jeudi, soirée plutôt calme.",
+      enonce:"Le <strong>jeudi</strong>, quelle part des places vendues l'a été au <strong>tarif étudiant</strong> ?",
+      tableau:TAB_SEMAINE,
+      options:["10 %","15 %","1,5 %","20 %"],
+      correct:0,
+      indice:"Repère la ligne du jeudi, puis la colonne étudiant. Le total à utiliser est celui de la ligne, pas celui de la colonne.",
+      explication:"15 places étudiantes sur les 150 vendues ce jeudi-là : 15 ÷ 150 = <span class='rep'>10 %</span>. La réponse 15 % confond l'effectif (15 places) avec un pourcentage — c'est le réflexe le plus courant quand les nombres se ressemblent.",
+      rappel:"Un effectif n'est pas un pourcentage, même quand les chiffres se ressemblent."
     }
   ]
 },
@@ -687,21 +719,21 @@ const LEVELS = [
     <h3>Avant de commencer</h3>
     <p><strong>La moyenne</strong> : on additionne tout, on divise par le nombre de valeurs.</p>
     <span class="formule">moyenne = somme des valeurs ÷ nombre de valeurs</span>
-    <p><strong>La moyenne pondérée</strong> — celle qui tombe le plus souvent aux tests. Une soirée où l'on vend <strong>2 places à 22 €</strong> et <strong>8 places à 10 €</strong> : le prix moyen d'une place n'est pas (22 + 10) ÷ 2 = 16 €, parce que les places à 10 € sont bien plus nombreuses.</p>
-    <span class="formule">(2 × 22 + 8 × 10) ÷ 10 = (44 + 80) ÷ 10 = 12,40 €</span>
+    <p><strong>La moyenne pondérée</strong> — celle qui tombe le plus souvent aux tests. Prenons une soirée où l'on vend <strong>3 places à 20 €</strong> et <strong>7 places à 10 €</strong>. Le prix moyen d'une place n'est pas (20 + 10) ÷ 2 = 15 €, parce que les places à 10 € sont bien plus nombreuses :</p>
+    <span class="formule">(3 × 20 + 7 × 10) ÷ 10 = (60 + 70) ÷ 10 = 13 €</span>
     <p>Le réflexe à garder : <strong>recette totale ÷ nombre total de places</strong>. Chaque prix compte autant de fois qu'il y a de places à ce prix.</p>
     <p><strong>La médiane</strong> : on <strong>trie</strong> les valeurs de la plus petite à la plus grande, puis on prend celle du milieu. S'il y a un nombre pair de valeurs, il y en a deux au milieu : on fait leur moyenne.</p>
     <p><strong>Le mode</strong> : la valeur qui revient le plus souvent.</p>
-    <p>Moyenne et médiane ne racontent pas la même chose : un seul très gros cachet tire la moyenne vers le haut, alors que la médiane, elle, ne bouge presque pas.</p>`,
+    <p>Moyenne et médiane ne racontent pas la même chose : une seule valeur très élevée tire la moyenne vers le haut, alors que la médiane, elle, ne bouge presque pas.</p>`,
   questions:[
     {
       type:"num",
       contexte:"Cinq dates de tournée, temps de montage relevé à chaque fois.",
-      enonce:"Les durées de montage ont été de <strong>6,5 h</strong>, <strong>5 h</strong>, <strong>7,5 h</strong>, <strong>8 h</strong> et <strong>3 h</strong>. Quelle est la durée <strong>moyenne</strong> de montage ?",
+      enonce:"Les durées de montage ont été de <strong>7 h</strong>, <strong>5 h</strong>, <strong>8 h</strong>, <strong>4 h</strong> et <strong>6 h</strong>. Quelle est la durée <strong>moyenne</strong> de montage ?",
       unite:"heures",
       reponse:6,
       indice:"Additionne les cinq durées, puis partage ce total entre les cinq dates.",
-      explication:"6,5 + 5 + 7,5 + 8 + 3 = 30 h au total, pour 5 dates : 30 ÷ 5 = <span class='rep'>6 h</span> en moyenne. Remarque qu'aucune date n'a duré exactement 6 h : une moyenne est une valeur de répartition, pas forcément une valeur observée.",
+      explication:"7 + 5 + 8 + 4 + 6 = 30 h au total, pour 5 dates : 30 ÷ 5 = <span class='rep'>6 h</span> en moyenne. Remarque que la moyenne tombe ici sur une durée réellement observée, mais ce n'est pas toujours le cas : une moyenne est une valeur de répartition, pas forcément une valeur du relevé.",
       rappel:"Moyenne = le total, partagé également entre toutes les valeurs."
     },
     {
@@ -709,20 +741,20 @@ const LEVELS = [
       contexte:"La même semaine de représentations, vue côté recette.",
       enonce:"Sur la semaine complète, quel est le <strong>prix moyen</strong> d'une place vendue ?",
       tableau:TAB_TARIFS,
-      options:["18,10 €","16,00 €","20,00 €","22,00 €"],
+      options:["19 €","16 €","20 €","22 €"],
       correct:0,
       indice:"Combien la semaine a-t-elle rapporté en tout, et combien de places ont été vendues en tout ? Le prix moyen est le rapport entre ces deux nombres.",
-      explication:"Recette : 540 × 22 = 11 880 €, 270 × 16 = 4 320 €, 190 × 10 = 1 900 €, soit 18 100 € pour 1 000 places. 18 100 ÷ 1 000 = <span class='rep'>18,10 €</span>. La réponse 16,00 € est la moyenne des trois tarifs, (22 + 16 + 10) ÷ 3 : elle fait comme si les 190 places étudiantes pesaient autant que les 540 places pleines. 20,00 € s'obtient en oubliant la ligne étudiant, et 22,00 € est simplement le tarif le plus fréquent — c'est le mode, pas la moyenne.",
+      explication:"Recette : 600 × 22 = 13 200 €, 300 × 16 = 4 800 €, 100 × 10 = 1 000 €, soit 19 000 € pour 1 000 places. 19 000 ÷ 1 000 = <span class='rep'>19 €</span>. La réponse 16 € est la moyenne des trois tarifs, (22 + 16 + 10) ÷ 3 : elle fait comme si les 100 places étudiantes pesaient autant que les 600 places pleines. 20 € s'obtient en oubliant la ligne étudiant, et 22 € est simplement le tarif le plus fréquent — c'est le mode, pas la moyenne.",
       rappel:"Une moyenne pondérée n'est jamais la moyenne des prix : c'est le total divisé par le nombre total."
     },
     {
       type:"num",
       contexte:"Cachets versés à une équipe technique pour un service, en euros.",
-      enonce:"Huit personnes, huit cachets : <span class='mono'>150 · 120 · 260 · 110 · 140 · 95 · 130 · 180</span>. Quel est le cachet <strong>médian</strong> ?",
+      enonce:"Huit personnes, huit cachets : <span class='mono'>150 · 120 · 270 · 110 · 140 · 100 · 130 · 180</span>. Quel est le cachet <strong>médian</strong> ?",
       unite:"€",
       reponse:135,
       indice:"Première chose à faire, toujours : ranger les valeurs dans l'ordre croissant. Ensuite, avec huit valeurs, combien y en a-t-il exactement au milieu ?",
-      explication:"Triés : 95 · 110 · 120 · <strong>130 · 140</strong> · 150 · 180 · 260. Huit valeurs, donc deux au milieu : (130 + 140) ÷ 2 = <span class='rep'>135 €</span>. La moyenne, elle, vaut 148,13 € : le cachet de 260 € la tire vers le haut à lui tout seul. C'est exactement pour cette raison qu'on parle plutôt de salaire médian que de salaire moyen.",
+      explication:"Triés : 100 · 110 · 120 · <strong>130 · 140</strong> · 150 · 180 · 270. Huit valeurs, donc deux au milieu : (130 + 140) ÷ 2 = <span class='rep'>135 €</span>. La moyenne, elle, vaut 150 € : le cachet de 270 € la tire vers le haut à lui tout seul. C'est exactement pour cette raison qu'on parle plutôt de salaire médian que de salaire moyen.",
       rappel:"Médiane : on trie d'abord. Nombre pair de valeurs → moyenne des deux du milieu."
     },
     {
@@ -734,6 +766,26 @@ const LEVELS = [
       indice:"Les valeurs sont dans l'ordre du calendrier, pas dans l'ordre croissant. Que faut-il faire avant d'aller chercher celle du milieu ?",
       explication:"Triées : 4 · 5 · 5 · <strong>6</strong> · 8 · 9 · 12. Sept valeurs : la quatrième est au milieu, la médiane vaut <span class='rep'>6 h</span>. La réponse 12 h est la valeur du milieu de la liste non triée — l'erreur numéro un. 7 h est la moyenne (49 ÷ 7) et 5 h est le mode, la durée qui revient deux fois.",
       rappel:"Sans tri préalable, la médiane n'a aucun sens."
+    },
+    {
+      type:"num",
+      contexte:"Nombre de techniciens présents sur les sept dernières représentations.",
+      enonce:"Relevé : <span class='mono'>3 · 5 · 4 · 5 · 6 · 5 · 7</span>. Quel est le <strong>mode</strong> de cette série ?",
+      unite:"techniciens",
+      reponse:5,
+      indice:"Le mode ne se calcule pas, il se compte : quelle valeur apparaît le plus grand nombre de fois ?",
+      explication:"La valeur 5 apparaît trois fois, toutes les autres une seule : le mode vaut <span class='rep'>5 techniciens</span>. Attention à ne pas confondre : le mode est la valeur la plus fréquente, pas le nombre de fois qu'elle apparaît (qui est 3), et pas non plus la moyenne (35 ÷ 7 = 5 ici, mais c'est une coïncidence).",
+      rappel:"Le mode est une valeur de la série, pas un effectif."
+    },
+    {
+      type:"num",
+      contexte:"Cinq représentations, deux jauges différentes.",
+      enonce:"<strong>2 soirs</strong> ont attiré <strong>200 spectateurs</strong> chacun et <strong>3 soirs</strong> en ont attiré <strong>150</strong> chacun. Quelle est la fréquentation <strong>moyenne</strong> par soir ?",
+      unite:"spectateurs",
+      reponse:170,
+      indice:"Combien de spectateurs au total sur les cinq soirs ? Ensuite seulement, on partage par le nombre de soirs.",
+      explication:"2 × 200 = 400 et 3 × 150 = 450, soit 850 spectateurs pour 5 soirs : 850 ÷ 5 = <span class='rep'>170 spectateurs</span>. La moyenne des deux jauges, (200 + 150) ÷ 2 = 175, serait fausse : les soirs à 150 sont plus nombreux, donc ils pèsent davantage. C'est une moyenne pondérée, exactement comme les prix de billets.",
+      rappel:"Dès que les effectifs diffèrent, la moyenne penche du côté le plus nombreux."
     }
   ]
 },
@@ -742,14 +794,13 @@ const LEVELS = [
   sous:"Étendue, quartiles, écart-type",
   theorie:`
     <h3>Avant de commencer</h3>
-    <p>Deux salles peuvent afficher la <strong>même moyenne</strong> et n'avoir rien à voir. L'une fait 180 spectateurs tous les soirs ; l'autre alterne les soirs à 60 et les soirs à 300. Même moyenne, deux réalités complètement différentes : ce qui les sépare, c'est la <strong>dispersion</strong>.</p>
+    <p>Deux séries peuvent avoir la <strong>même moyenne</strong> et n'avoir rien à voir. Deux techniciens montent un décor en 5 heures en moyenne : le premier met toujours entre 4 h 45 et 5 h 15, le second oscille entre 2 h et 8 h selon les jours. Même moyenne, deux réalités — ce qui les sépare, c'est la <strong>dispersion</strong>.</p>
     <p><strong>L'étendue</strong> est la mesure la plus simple :</p>
     <span class="formule">étendue = valeur la plus grande − valeur la plus petite</span>
     <p><strong>L'écart-type</strong> mesure la même idée, en plus fin : il dit à quelle distance les valeurs se tiennent de la moyenne. <strong>Tu n'auras pas à le calculer à la main</strong> — il faut seulement savoir le lire : petit écart-type = série régulière, grand écart-type = série irrégulière.</p>
-    <p>Un exemple de plateau : l'équipe A monte le décor en 6 h en moyenne, écart-type 0,4 h ; l'équipe B en 5,8 h de moyenne, écart-type 2,1 h. Pour un planning de tournée serré, on prend l'équipe A : à peine plus lente, mais prévisible.</p>
     <p><strong>Les quartiles</strong> coupent la série triée en quatre parts égales. On trie, on trouve la médiane, puis on prend la médiane de chaque moitié :</p>
-    <span class="formule">70 · 80 · 85 · [90] · 100 · 110 · 140
-médiane = 90    Q1 = 80    Q3 = 110</span>
+    <span class="formule">20 · 30 · 40 · [50] · 60 · 80 · 90
+médiane = 50    Q1 = 30    Q3 = 80</span>
     <p>Un quart des valeurs sont sous <strong>Q1</strong>, la moitié sous la <strong>médiane</strong>, trois quarts sous <strong>Q3</strong>.</p>`,
   questions:[
     {
@@ -758,9 +809,9 @@ médiane = 90    Q1 = 80    Q3 = 110</span>
       enonce:"Quelle est l'<strong>étendue</strong> de la fréquentation sur ces six soirées ?",
       tableau:TAB_SOIRS,
       unite:"places",
-      reponse:130,
+      reponse:150,
       indice:"L'étendue ne demande que deux nombres du tableau, et aucune addition. Lesquels ?",
-      explication:"Le meilleur soir, le samedi : 240 places. Le plus faible, le mardi : 110 places. 240 − 110 = <span class='rep'>130 places</span> d'écart entre les deux extrêmes.",
+      explication:"Le meilleur soir, le samedi : 250 places. Le plus faible, le mardi : 100 places. 250 − 100 = <span class='rep'>150 places</span> d'écart entre les deux extrêmes.",
       rappel:"Étendue = maximum − minimum. Elle donne l'amplitude d'une série, pas son niveau."
     },
     {
@@ -802,6 +853,31 @@ médiane = 90    Q1 = 80    Q3 = 110</span>
       indice:"Les quartiles ne parlent ni des records, ni des valeurs les plus fréquentes : ils partagent la série triée en quatre paquets de même taille.",
       explication:"Les quartiles découpent les 40 spectacles en quatre groupes de 10 : <span class='rep'>10 spectacles durent 85 min ou moins, 10 durent 115 min ou plus, et les 20 autres sont entre les deux</span>. Le plus court et le plus long ne sont pas donnés du tout (réponse 2). La médiane vaut bien 100 min, mais rien n'oblige la moyenne à valoir 100 (réponse 3). Et les durées les plus fréquentes, ce serait le mode (réponse 4).",
       rappel:"Les quartiles décrivent des positions dans la série triée, pas des records ni des fréquences."
+    },
+    {
+      type:"num",
+      contexte:"La même série de sept spectacles, vue par le haut cette fois.",
+      enonce:"<span class='mono'>70 · 75 · 85 · 95 · 100 · 115 · 140</span> (en minutes). Quel est le <strong>troisième quartile Q3</strong> ?",
+      unite:"minutes",
+      reponse:115,
+      indice:"Même méthode que pour Q1, mais sur l'autre moitié : celle qui se trouve au-dessus de la médiane.",
+      explication:"La médiane reste 95 min. La moitié haute est 100 · 115 · 140, et sa valeur du milieu vaut <span class='rep'>115 min</span>. Trois quarts des spectacles durent donc 115 minutes ou moins. Avec Q1 = 75 min, on sait maintenant que la moitié centrale des spectacles tient entre 75 et 115 minutes.",
+      rappel:"Q3 = la médiane de la moitié haute."
+    },
+    {
+      type:"qcm",
+      contexte:"Choix d'une équipe de montage pour une tournée au planning serré.",
+      enonce:"L'équipe A monte le décor en <strong>6 h en moyenne, avec un écart-type de 0,4 h</strong>. L'équipe B met <strong>5,8 h en moyenne, avec un écart-type de 2,1 h</strong>. Laquelle choisir, et pourquoi ?",
+      options:[
+        "L'équipe A : à peine plus lente en moyenne, mais beaucoup plus prévisible — et c'est la prévisibilité qui compte pour un planning.",
+        "L'équipe B : sa moyenne est plus basse, donc elle est meilleure.",
+        "L'équipe B : un grand écart-type signifie qu'elle est capable d'aller très vite.",
+        "Impossible de trancher : l'écart-type ne dit rien sur la régularité."
+      ],
+      correct:0,
+      indice:"Sur une tournée, que se passe-t-il le jour où le montage prend trois heures de plus que prévu ? Quelle équipe risque de te faire ce coup-là ?",
+      explication:"Les deux moyennes sont presque identiques, à 12 minutes près. Mais l'écart-type de l'équipe B est cinq fois plus grand : ses durées partent dans tous les sens, alors que l'équipe A tourne quasiment toujours autour de 6 h. <span class='rep'>Pour un planning, c'est l'équipe A</span> — une équipe imprévisible peut certes finir plus tôt, mais elle peut aussi faire rater une représentation.",
+      rappel:"Un petit écart-type se traduit concrètement par : on sait à quoi s'attendre."
     }
   ]
 },
@@ -813,18 +889,18 @@ médiane = 90    Q1 = 80    Q3 = 110</span>
     <p>Chaque type de graphique répond à une question différente :</p>
     <ul>
       <li><strong>barres</strong> — comparer des catégories entre elles (la recette de chaque soir) ;</li>
-      <li><strong>secteurs</strong> (le camembert) — montrer les parts d'un tout (la répartition du budget) ;</li>
-      <li><strong>courbe</strong> — suivre une évolution dans le temps (la fréquentation sur cinq saisons) ;</li>
+      <li><strong>secteurs</strong> (le camembert) — montrer les parts d'un tout (la répartition d'un budget) ;</li>
+      <li><strong>courbe</strong> — suivre une évolution dans le temps (la fréquentation saison après saison) ;</li>
       <li><strong>nuage de points</strong> — chercher un lien entre deux grandeurs (le prix du billet et le taux de remplissage).</li>
     </ul>
     <p>Pour mesurer une évolution, on calcule le <strong>taux de variation</strong> :</p>
     <span class="formule">taux = (valeur d'arrivée − valeur de départ) ÷ valeur de départ × 100</span>
-    <p>On divise <strong>toujours par la valeur de départ</strong> : passer de 8 000 à 9 200 spectateurs, c'est 1 200 ÷ 8 000 = 0,15, soit + 15 %.</p>
+    <p>On divise <strong>toujours par la valeur de départ</strong> : passer de 500 à 560 places, c'est 60 ÷ 500 = 0,12, soit + 12 %. Et une baisse se calcule pareil, le résultat sort simplement négatif.</p>
     <p><strong>Et surtout : un graphique peut être exact et malhonnête en même temps.</strong> Trois pièges à connaître :</p>
     <ul>
-      <li>l'<strong>axe vertical tronqué</strong> : s'il démarre à 80 au lieu de 0, la moindre hausse a l'air d'une explosion ;</li>
-      <li>le <strong>pourcentage pris pour un nombre</strong> : + 20 % dans une petite salle, ça peut faire 40 spectateurs ;</li>
-      <li>la <strong>corrélation prise pour une cause</strong> : deux choses qui augmentent en même temps n'ont pas forcément de lien.</li>
+      <li>l'<strong>axe vertical tronqué</strong> : quand il ne démarre pas à zéro, la moindre hausse prend des allures d'explosion ;</li>
+      <li>le <strong>pourcentage pris pour un nombre</strong> : une forte hausse en pourcentage dans une petite structure peut représenter très peu de monde ;</li>
+      <li>la <strong>corrélation prise pour une cause</strong> : deux choses qui évoluent en même temps n'ont pas forcément de lien.</li>
     </ul>`,
   questions:[
     {
@@ -835,7 +911,7 @@ médiane = 90    Q1 = 80    Q3 = 110</span>
       unite:"%",
       reponse:15,
       indice:"Commence par l'augmentation en nombre de spectateurs. Ensuite : cette augmentation, tu la rapportes à la valeur de départ ou à la valeur d'arrivée ?",
-      explication:"9 200 − 8 000 = 1 200 spectateurs de plus. Rapporté au point de départ : 1 200 ÷ 8 000 = 0,15, soit <span class='rep'>+ 15 %</span>. Si on divise par 9 200, la valeur d'arrivée, on trouve environ 13 % : c'est l'erreur la plus fréquente sur les taux de variation.",
+      explication:"6 900 − 6 000 = 900 spectateurs de plus. Rapporté au point de départ : 900 ÷ 6 000 = 0,15, soit <span class='rep'>+ 15 %</span>. Si on divise par 6 900, la valeur d'arrivée, on trouve environ 13 % : c'est l'erreur la plus fréquente sur les taux de variation.",
       rappel:"Un taux de variation se calcule toujours sur la valeur de départ."
     },
     {
@@ -883,6 +959,32 @@ médiane = 90    Q1 = 80    Q3 = 110</span>
       indice:"Qu'est-ce qui a pu changer d'autre au théâtre pendant cette même saison ? La peinture est-elle vraiment la seule explication possible ?",
       explication:"Deux faits simultanés ne prouvent aucun lien de cause à effet : c'est ce qu'on appelle confondre <strong>corrélation</strong> et <strong>causalité</strong>. Ici, une nouvelle programmation, une tête d'affiche, un changement de tarif ou même la météo peuvent expliquer les 12 %. <span class='rep'>Pour attribuer la hausse à la peinture, il faudrait que tout le reste soit resté identique</span> — ce qui n'arrive à peu près jamais.",
       rappel:"Deux courbes qui montent ensemble ne prouvent pas que l'une fait monter l'autre."
+    },
+    {
+      type:"num",
+      contexte:"Le même graphique, mais une saison difficile cette fois.",
+      enonce:"De la <strong>saison 3</strong> à la <strong>saison 4</strong>, la fréquentation a <strong>baissé</strong>. De quel <strong>pourcentage</strong> ?",
+      tableau:FIG_SAISONS,
+      unite:"%",
+      reponse:20,
+      indice:"Même formule que pour une hausse : l'écart, divisé par la valeur de départ. Ici, la valeur de départ est celle de la saison 3.",
+      explication:"7 500 − 6 000 = 1 500 spectateurs perdus. Rapporté à la saison 3 : 1 500 ÷ 7 500 = 0,2, soit une baisse de <span class='rep'>20 %</span>. Attention au piège de lecture : la saison suivante regagne 15 %, ce qui ne suffit pas à revenir au niveau de la saison 3, parce que ces 15 % s'appliquent à un nombre plus petit. C'est exactement le mécanisme du billet qui monte puis descend de 10 % au module 1.",
+      rappel:"Une baisse de x % puis une hausse de x % ne ramènent jamais au point de départ."
+    },
+    {
+      type:"qcm",
+      contexte:"Préparation du dossier de subvention.",
+      enonce:"Tu dois montrer comment le budget de production se répartit entre <strong>décor, lumière, son et communication</strong>. Quel type de graphique convient le mieux ?",
+      options:[
+        "Un diagramme en secteurs : il montre les parts d'un tout.",
+        "Une courbe : elle relie les quatre postes entre eux.",
+        "Un nuage de points : il montre le lien entre le décor et la lumière.",
+        "Un histogramme des durées de spectacle."
+      ],
+      correct:0,
+      indice:"Les quatre postes forment ensemble la totalité du budget. Quel graphique est fait pour montrer comment un tout se partage ?",
+      explication:"Les quatre postes forment un tout — le budget complet — et la question porte sur leur <strong>répartition</strong> : c'est exactement l'usage du <span class='rep'>diagramme en secteurs</span>. La courbe ne conviendrait pas : elle sert à suivre une évolution dans le temps, et il n'y a aucun ordre chronologique entre décor et son. Le nuage de points, lui, sert à comparer deux grandeurs mesurées ensemble, pas à découper un total.",
+      rappel:"Un tout qui se partage → secteurs. Une évolution dans le temps → courbe."
     }
   ]
 }
@@ -1344,6 +1446,5 @@ function confetti(){
   }
 }
 </script>
-
 </body>
 </html>
