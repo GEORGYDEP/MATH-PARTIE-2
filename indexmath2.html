@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="fr-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 — Lire les chiffres | Prépa test d'admission</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN SYSTEM
+   ============================================================ */
+:root{
+  --bg:#0e1420;
+  --bg2:#141c2c;
+  --bg3:#1b2438;
+  --card:#18202f;
+  --card2:#1f2938;
+  --accent:#3fc9a8;
+  --accent-dim:rgba(63,201,168,.14);
+  --orange:#f0a85c;
+  --orange-dim:rgba(240,168,92,.14);
+  --text:#eef2f8;
+  --text2:#a3b0c4;
+  --text3:#68758a;
+  --border:#28324a;
+  --border2:#36425e;
+  --radius:16px;
+  --success:#4ade80;
+  --success-dim:rgba(74,222,128,.12);
+  --error:#fb7185;
+  --error-dim:rgba(251,113,133,.12);
+  --shadow:0 12px 32px rgba(0,0,0,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Outfit',system-ui,sans-serif;
+  background:
+    radial-gradient(1100px 520px at 12% -8%, rgba(63,201,168,.10), transparent 60%),
+    radial-gradient(900px 480px at 92% 6%, rgba(240,168,92,.08), transparent 62%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.6;
+  padding:16px;
+}
+.mono{font-family:'Space Mono',monospace}
+.wrap{max-width:860px;margin:0 auto}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* ============================================================
+   SIGNATURE — la barre « console lumière »
+   ============================================================ */
+.console{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px;margin-bottom:18px;
+  flex-wrap:wrap;
+}
+.console-label{
+  font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text3);white-space:nowrap;
+}
+.leds{display:flex;gap:7px;margin-left:auto}
+.led{
+  width:26px;height:9px;border-radius:3px;background:var(--border2);
+  transition:background .3s ease, box-shadow .3s ease;
+}
+.led.on-first{background:var(--success);box-shadow:0 0 10px rgba(74,222,128,.55)}
+.led.on-helped{background:var(--orange);box-shadow:0 0 10px rgba(240,168,92,.55)}
+.led.on-shown{background:var(--error);box-shadow:0 0 10px rgba(251,113,133,.5)}
+.led.active{background:var(--accent);box-shadow:0 0 12px rgba(63,201,168,.7)}
+
+/* ============================================================
+   ÉLÉMENTS COMMUNS
+   ============================================================ */
+.screen{display:none;animation:fade .35s ease}
+.screen.visible{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);
+}
+.card + .card{margin-top:16px}
+
+h1{font-size:2rem;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+h2{font-size:1.35rem;font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.05rem;font-weight:600}
+.eyebrow{
+  font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:10px;
+}
+.lead{color:var(--text2);font-size:1.02rem}
+.muted{color:var(--text3);font-size:.9rem}
+
+.btn{
+  font-family:'Outfit',sans-serif;font-size:1rem;font-weight:600;
+  border:none;border-radius:12px;padding:13px 24px;cursor:pointer;
+  background:var(--accent);color:#06231c;
+  transition:transform .15s ease, filter .15s ease;
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-ghost:hover{color:var(--text);border-color:var(--accent)}
+.btn-orange{background:var(--orange);color:#2b1806}
+.btn-sm{padding:9px 16px;font-size:.9rem}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+/* ============================================================
+   ACCUEIL
+   ============================================================ */
+.hero{text-align:left;padding:34px 26px}
+.hero h1{margin-bottom:14px}
+.hero .lead{max-width:60ch}
+.objectifs{
+  list-style:none;margin:22px 0 4px;display:grid;gap:9px;
+}
+.objectifs li{
+  padding-left:26px;position:relative;color:var(--text2);font-size:.96rem;
+}
+.objectifs li::before{
+  content:'';position:absolute;left:0;top:.62em;
+  width:11px;height:3px;border-radius:2px;background:var(--accent);
+}
+.note-doux{
+  margin-top:22px;padding:16px 18px;border-radius:12px;
+  background:var(--accent-dim);border-left:3px solid var(--accent);
+  color:var(--text2);font-size:.95rem;
+}
+
+/* ============================================================
+   HUB — sélection des niveaux
+   ============================================================ */
+.hub-grid{display:grid;gap:12px;margin-top:6px}
+.niveau-card{
+  display:flex;align-items:center;gap:16px;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;cursor:pointer;color:var(--text);
+  font-family:'Outfit',sans-serif;
+  transition:border-color .2s ease, transform .2s ease, background .2s ease;
+}
+.niveau-card:hover{border-color:var(--accent);transform:translateX(4px);background:var(--card2)}
+.niveau-num{
+  font-family:'Space Mono',monospace;font-size:1.5rem;font-weight:700;
+  color:var(--accent);min-width:38px;
+}
+.niveau-info{flex:1;min-width:0}
+.niveau-info strong{display:block;font-size:1.05rem;font-weight:600;margin-bottom:3px}
+.niveau-info span{color:var(--text3);font-size:.85rem}
+.niveau-etat{
+  font-family:'Space Mono',monospace;font-size:.78rem;color:var(--text3);
+  white-space:nowrap;text-align:right;
+}
+.niveau-card.done{border-color:var(--border2)}
+.niveau-card.done .niveau-etat{color:var(--success)}
+
+.progress-bar{
+  height:7px;background:var(--bg3);border-radius:99px;overflow:hidden;margin:16px 0 6px;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--accent),var(--orange));
+  width:0;transition:width .5s ease;border-radius:99px;
+}
+
+/* ============================================================
+   NIVEAU — théorie + questions
+   ============================================================ */
+.theorie{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:14px;padding:20px 22px;margin-bottom:18px;
+}
+.theorie h3{color:var(--accent);margin-bottom:12px;font-size:1rem}
+.theorie p{color:var(--text2);font-size:.96rem;margin-bottom:10px}
+.theorie p:last-child{margin-bottom:0}
+.theorie strong{color:var(--text);font-weight:600}
+.theorie .formule{
+  font-family:'Space Mono',monospace;background:var(--bg);
+  border:1px solid var(--border2);border-radius:9px;
+  padding:10px 14px;margin:12px 0;display:block;color:var(--accent);
+  font-size:.94rem;overflow-x:auto;white-space:pre-line;
+}
+.theorie ul{margin:8px 0 10px 20px;color:var(--text2);font-size:.95rem}
+.theorie li{margin-bottom:5px}
+
+.q-contexte{
+  color:var(--text3);font-size:.85rem;font-style:italic;margin-bottom:8px;
+}
+.q-enonce{font-size:1.12rem;font-weight:500;margin-bottom:18px;line-height:1.5}
+.q-enonce .mono{color:var(--accent);font-size:1.05em}
+
+table.data{
+  width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:.93rem;
+}
+table.data th,table.data td{
+  border:1px solid var(--border2);padding:9px 12px;text-align:left;
+}
+table.data th{background:var(--bg3);color:var(--accent);font-weight:600;font-size:.82rem;
+  text-transform:uppercase;letter-spacing:.05em}
+table.data td{color:var(--text2)}
+table.data td.num{font-family:'Space Mono',monospace;text-align:right;color:var(--text)}
+table.data tr.total td{background:var(--bg3);color:var(--text);font-weight:600}
+
+/* ============================================================
+   FIGURES — graphiques en SVG inline
+   ============================================================ */
+.figure{
+  background:var(--bg3);border:1px solid var(--border);border-radius:14px;
+  padding:16px 14px 12px;margin:14px 0 18px;
+}
+.figure svg{display:block;width:100%;height:auto}
+.fig-titre{
+  font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:10px;
+}
+.fig-note{font-size:.82rem;color:var(--text3);font-style:italic;margin-top:8px}
+.svg-bar{fill:var(--accent)}
+.svg-bar-b{fill:var(--orange)}
+.svg-axis{stroke:var(--border2);stroke-width:1.5;fill:none}
+.svg-grid{stroke:var(--border);stroke-width:1;stroke-dasharray:4 4}
+.svg-lab{font-family:'Space Mono',monospace;font-size:11px;fill:var(--text3)}
+.svg-val{font-family:'Space Mono',monospace;font-size:12px;fill:var(--text)}
+.svg-warn{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;fill:var(--orange)}
+
+.options{display:grid;gap:10px}
+.option{
+  text-align:left;background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;padding:14px 18px;cursor:pointer;color:var(--text);
+  font-family:'Outfit',sans-serif;font-size:1rem;
+  transition:border-color .18s ease, background .18s ease;
+}
+.option:hover:not(:disabled){border-color:var(--accent);background:var(--bg3)}
+.option:disabled{cursor:default}
+.option.correct{border-color:var(--success);background:var(--success-dim)}
+.option.wrong{border-color:var(--error);background:var(--error-dim)}
+
+.num-zone{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start}
+.num-field{flex:1;min-width:200px}
+.num-input{
+  width:100%;font-family:'Space Mono',monospace;font-size:1.15rem;
+  background:var(--bg);border:1px solid var(--border2);border-radius:12px;
+  padding:14px 16px;color:var(--text);
+}
+.num-input:focus{border-color:var(--accent);outline:none}
+.num-input.correct{border-color:var(--success)}
+.num-input.wrong{border-color:var(--error)}
+.calc-preview{
+  font-family:'Space Mono',monospace;font-size:.86rem;color:var(--orange);
+  margin-top:8px;min-height:1.2em;padding-left:4px;
+}
+.unite{
+  font-family:'Space Mono',monospace;color:var(--text3);font-size:.95rem;
+  padding-top:16px;
+}
+
+.feedback{
+  margin-top:16px;padding:16px 18px;border-radius:12px;font-size:.96rem;
+  animation:fade .25s ease;
+}
+.feedback strong{display:block;margin-bottom:6px;font-size:1rem}
+.feedback.ok{background:var(--success-dim);border-left:3px solid var(--success);color:var(--text2)}
+.feedback.hint{background:var(--orange-dim);border-left:3px solid var(--orange);color:var(--text2)}
+.feedback.show{background:var(--error-dim);border-left:3px solid var(--error);color:var(--text2)}
+.feedback .rep{font-family:'Space Mono',monospace;color:var(--text);font-weight:700}
+
+/* ============================================================
+   BILANS
+   ============================================================ */
+.legende{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0 20px;font-size:.88rem;color:var(--text2)}
+.legende span{display:flex;align-items:center;gap:7px}
+.pastille{width:12px;height:12px;border-radius:50%;display:inline-block}
+.p-vert{background:var(--success)}
+.p-orange{background:var(--orange)}
+.p-rouge{background:var(--error)}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.stat{
+  background:var(--bg3);border:1px solid var(--border);border-radius:12px;
+  padding:16px 12px;text-align:center;
+}
+.stat .val{font-family:'Space Mono',monospace;font-size:1.7rem;font-weight:700;display:block}
+.stat .lab{font-size:.76rem;color:var(--text3);margin-top:4px;display:block;line-height:1.3}
+.stat.v .val{color:var(--success)}
+.stat.o .val{color:var(--orange)}
+.stat.r .val{color:var(--error)}
+
+.medaille{font-size:3.4rem;text-align:center;margin:8px 0}
+.grade{
+  text-align:center;font-family:'Space Mono',monospace;font-size:1.25rem;
+  font-weight:700;margin-bottom:8px;
+}
+.message{text-align:center;color:var(--text2);max-width:52ch;margin:0 auto 4px}
+
+.ressenti{
+  margin-top:24px;padding-top:20px;border-top:1px solid var(--border);
+}
+.ressenti p{color:var(--text2);font-size:.95rem;margin-bottom:12px}
+.ressenti-btns{display:flex;gap:10px;flex-wrap:wrap}
+.r-btn{
+  flex:1;min-width:120px;background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;padding:14px 10px;cursor:pointer;color:var(--text2);
+  font-family:'Outfit',sans-serif;font-size:.92rem;text-align:center;
+  transition:border-color .18s ease,color .18s ease;
+}
+.r-btn:hover{border-color:var(--accent);color:var(--text)}
+.r-btn.sel{border-color:var(--accent);background:var(--accent-dim);color:var(--text)}
+.r-btn .emo{display:block;font-size:1.5rem;margin-bottom:4px}
+
+/* Fiche finale */
+.fiche-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.92rem}
+.fiche-table th,.fiche-table td{
+  border-bottom:1px solid var(--border);padding:11px 10px;text-align:left;
+}
+.fiche-table th{
+  color:var(--text3);font-size:.74rem;text-transform:uppercase;
+  letter-spacing:.07em;font-weight:600;
+}
+.fiche-table td{color:var(--text2)}
+.fiche-table td.theme{color:var(--text);font-weight:500}
+.fiche-table td.score{font-family:'Space Mono',monospace;text-align:center}
+.verdict{
+  font-size:.8rem;padding:3px 10px;border-radius:99px;white-space:nowrap;
+  font-weight:600;display:inline-block;
+}
+.verdict.acquis{background:var(--success-dim);color:var(--success)}
+.verdict.fragile{background:var(--orange-dim);color:var(--orange)}
+.verdict.prio{background:var(--error-dim);color:var(--error)}
+
+/* Confettis */
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:99;overflow:hidden}
+.conf{
+  position:absolute;width:9px;height:14px;top:-20px;opacity:.9;
+  animation:fall linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(105vh) rotate(720deg);opacity:0}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  .niveau-card:hover,.btn:hover{transform:none}
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:768px){
+  body{padding:12px}
+  .hero{padding:26px 20px}
+  h1{font-size:1.6rem}
+  .card{padding:20px 18px}
+  .stats{grid-template-columns:1fr;gap:9px}
+  .stat{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:13px 16px}
+  .stat .lab{margin-top:0}
+  table.data{font-size:.86rem}
+  table.data th,table.data td{padding:7px 8px}
+}
+@media(max-width:480px){
+  h1{font-size:1.4rem}
+  h2{font-size:1.15rem}
+  .q-enonce{font-size:1.03rem}
+  .console{padding:9px 12px;gap:8px}
+  .led{width:20px}
+  .niveau-card{padding:15px 16px;gap:12px}
+  .niveau-num{font-size:1.25rem;min-width:30px}
+  .btn{width:100%;text-align:center}
+  .btn-row .btn{flex:1 1 100%}
+  .fiche-table{font-size:.85rem}
+  .fiche-table th,.fiche-table td{padding:9px 6px}
+  table.data{font-size:.8rem}
+  table.data th,table.data td{padding:6px 5px}
+  .figure{padding:12px 10px 10px}
+}
+
+/* ============================================================
+   IMPRESSION DE LA FICHE
+   ============================================================ */
+@media print{
+  body{background:#fff;color:#000;padding:0}
+  .no-print{display:none !important}
+  .card{box-shadow:none;border:1px solid #ccc;background:#fff}
+  .fiche-table td,.fiche-table th{color:#000;border-bottom:1px solid #bbb}
+  .fiche-table td.theme{color:#000}
+  .verdict{border:1px solid #666;color:#000 !important;background:#fff !important}
+  .note-doux{background:#fff;border-left:3px solid #666;color:#000}
+  h1,h2,h3,.lead,.muted{color:#000}
+}
+</style>
+</head>
+<body>
+<div id="confetti" aria-hidden="true"></div>
+<div class="wrap">
+
+<!-- ========================= ACCUEIL ========================= -->
+<section id="scr-accueil" class="screen visible">
+  <div class="card hero">
+    <div class="eyebrow">Prépa test d'admission · Régisseur général de spectacle</div>
+    <h1>Module 2 — Lire les chiffres</h1>
+    <p class="lead">Tableaux de données, moyennes, graphiques. C'est la partie du test qui ressemble le plus au métier : une jauge, une recette, un taux de remplissage, une courbe de fréquentation, ça se lit tous les jours dans une salle.</p>
+
+    <ul class="objectifs">
+      <li>4 étapes courtes, 16 questions au total</li>
+      <li>Environ 35 minutes, et tu peux t'arrêter entre deux étapes</li>
+      <li>Un rappel de cours avant chaque série — rien à réviser avant</li>
+      <li>Un indice disponible à tout moment, sans pénalité</li>
+      <li>À la fin : une fiche des points à travailler, imprimable</li>
+    </ul>
+
+    <div class="note-doux">
+      <strong>Ce module n'est pas une évaluation.</strong> Il sert à repérer ce qui est déjà là et ce qui demande un coup de main. Une réponse fausse ici, c'est une information utile — pas une erreur. Tu peux refaire n'importe quelle étape autant de fois que tu veux, dans l'ordre que tu veux.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="goHub()">Commencer</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= HUB ========================= -->
+<section id="scr-hub" class="screen">
+  <div class="console no-print">
+    <span class="console-label">Module 2 · Lire les chiffres</span>
+    <span class="console-label" id="hub-compteur" style="margin-left:auto"></span>
+  </div>
+
+  <div class="card">
+    <h2>Les 4 étapes</h2>
+    <p class="muted" style="margin-top:6px">L'ordre proposé est le plus logique, mais tu peux commencer par celle que tu veux et revenir sur une étape autant de fois que tu le souhaites.</p>
+    <div class="progress-bar"><div class="progress-fill" id="hub-progress"></div></div>
+    <div class="hub-grid" id="hub-grid"></div>
+    <div class="btn-row">
+      <button class="btn btn-orange" id="btn-fiche" onclick="showFinal()" style="display:none">Voir ma fiche de synthèse</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= NIVEAU ========================= -->
+<section id="scr-niveau" class="screen">
+  <div class="console no-print">
+    <span class="console-label" id="niv-label"></span>
+    <div class="leds" id="niv-leds"></div>
+  </div>
+  <div id="niv-theorie"></div>
+  <div class="card">
+    <div class="eyebrow" id="q-compteur"></div>
+    <div id="q-contexte"></div>
+    <div class="q-enonce" id="q-enonce"></div>
+    <div id="q-tableau"></div>
+    <div id="q-zone"></div>
+    <div id="q-feedback"></div>
+    <div class="btn-row" id="q-actions"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost btn-sm" onclick="goHub()">← Retour aux étapes</button>
+  </div>
+</section>
+
+<!-- ========================= BILAN NIVEAU ========================= -->
+<section id="scr-bilan" class="screen">
+  <div class="card">
+    <div class="eyebrow" id="bil-eyebrow"></div>
+    <div class="medaille" id="bil-medaille"></div>
+    <div class="grade" id="bil-grade"></div>
+    <p class="message" id="bil-message"></p>
+
+    <div class="legende">
+      <span><i class="pastille p-vert"></i> Trouvé seule</span>
+      <span><i class="pastille p-orange"></i> Trouvé avec un coup de main</span>
+      <span><i class="pastille p-rouge"></i> Réponse montrée</span>
+    </div>
+    <div class="stats" id="bil-stats"></div>
+
+    <div class="ressenti">
+      <p><strong>Et toi, tu le sens comment ?</strong> Ton ressenti compte autant que le score : il servira à choisir sur quoi passer du temps pendant les deux séances de cours.</p>
+      <div class="ressenti-btns" id="bil-ressenti"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="bil-suivant"></button>
+      <button class="btn btn-ghost" id="bil-recommencer">Refaire cette étape</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= BILAN FINAL ========================= -->
+<section id="scr-final" class="screen">
+  <div class="card">
+    <div class="eyebrow">Module 2 terminé · Lire les chiffres</div>
+    <h1 id="fin-titre">Ta fiche de synthèse</h1>
+    <p class="lead" id="fin-lead" style="margin-top:10px"></p>
+
+    <div class="stats" id="fin-stats"></div>
+
+    <h3 style="margin-top:26px">Détail par thème</h3>
+    <table class="fiche-table">
+      <thead>
+        <tr><th>Thème</th><th style="text-align:center">Score</th><th>Ressenti</th><th>À faire</th></tr>
+      </thead>
+      <tbody id="fin-tbody"></tbody>
+    </table>
+
+    <div id="fin-priorites"></div>
+
+    <div class="btn-row no-print">
+      <button class="btn" onclick="window.print()">Imprimer la fiche</button>
+      <button class="btn btn-ghost" onclick="goHub()">Retour aux étapes</button>
+      <button class="btn btn-ghost" onclick="resetAll()">Tout recommencer</button>
+    </div>
+  </div>
+</section>
+
+</div>
+<script>
+/* ============================================================
+   CONTENU PÉDAGOGIQUE — MODULE 2
+   ============================================================ */
+
+/* Tableau de billetterie réutilisé dans plusieurs questions */
+const TAB_SEMAINE = `
+<table class="data">
+  <thead>
+    <tr><th>Soir</th><th>Plein tarif</th><th>Tarif réduit</th><th>Étudiant</th><th>Total du soir</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Mardi</td><td class="num">60</td><td class="num">30</td><td class="num">20</td><td class="num">110</td></tr>
+    <tr><td>Mercredi</td><td class="num">72</td><td class="num">38</td><td class="num">30</td><td class="num">140</td></tr>
+    <tr><td>Jeudi</td><td class="num">85</td><td class="num">45</td><td class="num">30</td><td class="num">160</td></tr>
+    <tr><td>Vendredi</td><td class="num">120</td><td class="num">50</td><td class="num">40</td><td class="num">210</td></tr>
+    <tr><td>Samedi</td><td class="num">140</td><td class="num">60</td><td class="num">40</td><td class="num">240</td></tr>
+    <tr><td>Dimanche</td><td class="num">63</td><td class="num">47</td><td class="num">30</td><td class="num">140</td></tr>
+    <tr class="total"><td>Total</td><td class="num">540</td><td class="num">270</td><td class="num">190</td><td class="num">1 000</td></tr>
+  </tbody>
+</table>`;
+
+const TAB_TARIFS = `
+<table class="data">
+  <thead>
+    <tr><th>Catégorie</th><th>Prix de la place</th><th>Places vendues</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Plein tarif</td><td class="num">22 €</td><td class="num">540</td></tr>
+    <tr><td>Tarif réduit</td><td class="num">16 €</td><td class="num">270</td></tr>
+    <tr><td>Tarif étudiant</td><td class="num">10 €</td><td class="num">190</td></tr>
+    <tr class="total"><td>Total</td><td class="num">—</td><td class="num">1 000</td></tr>
+  </tbody>
+</table>`;
+
+const TAB_SOIRS = `
+<table class="data">
+  <thead>
+    <tr><th>Mardi</th><th>Mercredi</th><th>Jeudi</th><th>Vendredi</th><th>Samedi</th><th>Dimanche</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">110</td><td class="num">140</td><td class="num">160</td><td class="num">210</td><td class="num">240</td><td class="num">140</td></tr>
+  </tbody>
+</table>`;
+
+/* Graphique en barres — fréquentation sur 5 saisons (axe partant de 0) */
+const FIG_SAISONS = `
+<div class="figure">
+  <div class="fig-titre">Fréquentation annuelle · nombre de spectateurs</div>
+  <svg viewBox="0 0 480 250" role="img" aria-label="Diagramme en barres : saison 1, 6800 spectateurs ; saison 2, 7400 ; saison 3, 8600 ; saison 4, 8000 ; saison 5, 9200.">
+    <line class="svg-grid" x1="46" y1="120" x2="466" y2="120"></line>
+    <line class="svg-grid" x1="46" y1="40" x2="466" y2="40"></line>
+    <text class="svg-lab" x="40" y="204" text-anchor="end">0</text>
+    <text class="svg-lab" x="40" y="124" text-anchor="end">5 000</text>
+    <text class="svg-lab" x="40" y="44" text-anchor="end">10 000</text>
+    <rect class="svg-bar" x="66"  y="91.2" width="56" height="108.8" rx="3"></rect>
+    <rect class="svg-bar" x="146" y="81.6" width="56" height="118.4" rx="3"></rect>
+    <rect class="svg-bar" x="226" y="62.4" width="56" height="137.6" rx="3"></rect>
+    <rect class="svg-bar" x="306" y="72"   width="56" height="128"   rx="3"></rect>
+    <rect class="svg-bar" x="386" y="52.8" width="56" height="147.2" rx="3"></rect>
+    <text class="svg-val" x="94"  y="84"  text-anchor="middle">6 800</text>
+    <text class="svg-val" x="174" y="74"  text-anchor="middle">7 400</text>
+    <text class="svg-val" x="254" y="55"  text-anchor="middle">8 600</text>
+    <text class="svg-val" x="334" y="65"  text-anchor="middle">8 000</text>
+    <text class="svg-val" x="414" y="45"  text-anchor="middle">9 200</text>
+    <path class="svg-axis" d="M46 36 L46 200 L466 200"></path>
+    <text class="svg-lab" x="94"  y="219" text-anchor="middle">Saison 1</text>
+    <text class="svg-lab" x="174" y="219" text-anchor="middle">Saison 2</text>
+    <text class="svg-lab" x="254" y="219" text-anchor="middle">Saison 3</text>
+    <text class="svg-lab" x="334" y="219" text-anchor="middle">Saison 4</text>
+    <text class="svg-lab" x="414" y="219" text-anchor="middle">Saison 5</text>
+  </svg>
+</div>`;
+
+/* Graphique à axe tronqué — affiche promotionnelle */
+const FIG_TRONQUE = `
+<div class="figure">
+  <div class="fig-titre">Affiche promotionnelle · taux de remplissage</div>
+  <svg viewBox="0 0 420 250" role="img" aria-label="Diagramme en barres dont l'axe vertical commence à 80 pour cent : saison passée 82 pour cent, cette saison 86 pour cent.">
+    <text class="svg-warn" x="210" y="22" text-anchor="middle">FRÉQUENTATION EN EXPLOSION !</text>
+    <line class="svg-grid" x1="56" y1="168" x2="400" y2="168"></line>
+    <line class="svg-grid" x1="56" y1="136" x2="400" y2="136"></line>
+    <line class="svg-grid" x1="56" y1="104" x2="400" y2="104"></line>
+    <line class="svg-grid" x1="56" y1="72"  x2="400" y2="72"></line>
+    <line class="svg-grid" x1="56" y1="40"  x2="400" y2="40"></line>
+    <text class="svg-lab" x="50" y="204" text-anchor="end">80 %</text>
+    <text class="svg-lab" x="50" y="172" text-anchor="end">82 %</text>
+    <text class="svg-lab" x="50" y="140" text-anchor="end">84 %</text>
+    <text class="svg-lab" x="50" y="108" text-anchor="end">86 %</text>
+    <text class="svg-lab" x="50" y="76"  text-anchor="end">88 %</text>
+    <text class="svg-lab" x="50" y="44"  text-anchor="end">90 %</text>
+    <rect class="svg-bar"   x="120" y="168" width="80" height="32" rx="3"></rect>
+    <rect class="svg-bar-b" x="250" y="104" width="80" height="96" rx="3"></rect>
+    <text class="svg-val" x="160" y="161" text-anchor="middle">82 %</text>
+    <text class="svg-val" x="290" y="97"  text-anchor="middle">86 %</text>
+    <path class="svg-axis" d="M56 36 L56 200 L400 200"></path>
+    <text class="svg-lab" x="160" y="219" text-anchor="middle">Saison passée</text>
+    <text class="svg-lab" x="290" y="219" text-anchor="middle">Cette saison</text>
+  </svg>
+</div>`;
+
+const LEVELS = [
+{
+  titre:"Lire un tableau de données",
+  sous:"Effectifs, totaux, fréquences, cumuls",
+  theorie:`
+    <h3>Avant de commencer</h3>
+    <p>Un tableau de billetterie, c'est d'abord une histoire de <strong>totaux</strong>. Cette semaine, la salle a vendu <strong>1 000 places</strong> : 540 au plein tarif, 270 au tarif réduit, 190 au tarif étudiant.</p>
+    <p>Le nombre de places d'une catégorie, c'est l'<strong>effectif</strong>. Sa part dans le total, c'est la <strong>fréquence</strong>.</p>
+    <span class="formule">fréquence = effectif ÷ total
+270 ÷ 1 000 = 0,27  →  27 %</span>
+    <p>Trois points de vigilance qui reviennent sans arrêt dans les tests :</p>
+    <ul>
+      <li>un effectif se compte en places, une <strong>fréquence n'a pas d'unité</strong> (ou s'écrit en %) ;</li>
+      <li>la somme de toutes les fréquences fait toujours <strong>100 %</strong> — c'est une façon de vérifier son travail ;</li>
+      <li>l'<strong>effectif cumulé</strong>, c'est le total depuis le début : les places vendues jusqu'au jeudi soir inclus, pas seulement celles du jeudi.</li>
+    </ul>
+    <p>Et le piège classique : <strong>diviser par le bon total</strong>. « La part du plein tarif le samedi » se calcule sur le total du samedi, pas sur celui de la semaine.</p>`,
+  questions:[
+    {
+      type:"qcm",
+      contexte:"Bilan de billetterie, une semaine de représentations.",
+      enonce:"Sur l'ensemble de la semaine, quelle <strong>part</strong> de la fréquentation le <strong>tarif réduit</strong> représente-t-il ?",
+      tableau:TAB_SEMAINE,
+      options:["27 %","50 %","2,7 %","270 %"],
+      correct:0,
+      indice:"Une fréquence se calcule toujours par rapport à un total. Ici, le total de quoi : du plein tarif, ou de toutes les places de la semaine ?",
+      explication:"270 places au tarif réduit sur 1 000 places vendues : 270 ÷ 1 000 = 0,27, soit <span class='rep'>27 %</span>. La réponse 50 % vient d'une comparaison avec le plein tarif — 270, c'est bien la moitié de 540 — et non avec le total. C'est l'erreur la plus fréquente sur ce type de tableau.",
+      rappel:"Une fréquence se calcule par rapport au total, jamais par rapport à une autre catégorie."
+    },
+    {
+      type:"num",
+      contexte:"La productrice demande où en est la billetterie en milieu de semaine.",
+      enonce:"Combien de places ont été vendues <strong>en tout depuis le début de la semaine, jusqu'au jeudi soir inclus</strong> ?",
+      tableau:TAB_SEMAINE,
+      unite:"places",
+      reponse:410,
+      indice:"« Cumulé », ça veut dire depuis le début : le jeudi ne compte pas tout seul. Quels soirs faut-il additionner ?",
+      explication:"Mardi 110 + mercredi 140 + jeudi 160 = <span class='rep'>410 places</span>. La réponse 160 est l'effectif du jeudi seul : c'est un effectif, pas un effectif cumulé.",
+      rappel:"Un effectif cumulé s'additionne depuis la première ligne du tableau."
+    },
+    {
+      type:"qcm",
+      contexte:"Le samedi soir, la salle est presque pleine.",
+      enonce:"Le <strong>samedi</strong>, quelle part des places vendues l'a été au <strong>plein tarif</strong> ?",
+      tableau:TAB_SEMAINE,
+      options:["Environ 58 %","Environ 26 %","14 %","70 %"],
+      correct:0,
+      indice:"Le samedi, combien de places ont été vendues en tout, toutes catégories confondues ? C'est ce nombre-là qui sert de total.",
+      explication:"Le samedi : 140 places au plein tarif sur 240 vendues. 140 ÷ 240 ≈ 0,583, soit <span class='rep'>environ 58 %</span>. Les autres réponses viennent toutes du mauvais total : 26 % de 140 ÷ 540 (le total de la colonne, donc toute la semaine au plein tarif), 14 % de 140 ÷ 1 000 (le total général), et 70 % de 140 ÷ 200 en oubliant la colonne étudiant.",
+      rappel:"Avant de diviser, demande-toi : le total de la ligne, celui de la colonne, ou celui du tableau ?"
+    },
+    {
+      type:"num",
+      contexte:"Les tarifs pratiqués : plein 22 €, réduit 16 €, étudiant 10 €.",
+      enonce:"Quelle <strong>recette</strong> la soirée du <strong>mardi</strong> a-t-elle rapportée ? Tu peux taper directement tout le calcul dans le champ.",
+      tableau:TAB_SEMAINE,
+      unite:"€",
+      reponse:2000,
+      indice:"Chaque catégorie a son propre prix : trois multiplications d'abord, l'addition ensuite.",
+      explication:"60 × 22 = 1 320 €, 30 × 16 = 480 €, 20 × 10 = 200 €. Total : <span class='rep'>2 000 €</span>. Deux erreurs guettent ici : 110 × 22 = 2 420 € (le plein tarif appliqué à tout le monde) et 110 × 16 = 1 760 € (la moyenne des trois tarifs — on verra à l'étape suivante pourquoi ça ne marche pas).",
+      rappel:"Quand les prix diffèrent, on multiplie catégorie par catégorie avant d'additionner."
+    }
+  ]
+},
+{
+  titre:"Les valeurs centrales",
+  sous:"Moyenne, moyenne pondérée, médiane, mode",
+  theorie:`
+    <h3>Avant de commencer</h3>
+    <p><strong>La moyenne</strong> : on additionne tout, on divise par le nombre de valeurs.</p>
+    <span class="formule">moyenne = somme des valeurs ÷ nombre de valeurs</span>
+    <p><strong>La moyenne pondérée</strong> — celle qui tombe le plus souvent aux tests. Une soirée où l'on vend <strong>2 places à 22 €</strong> et <strong>8 places à 10 €</strong> : le prix moyen d'une place n'est pas (22 + 10) ÷ 2 = 16 €, parce que les places à 10 € sont bien plus nombreuses.</p>
+    <span class="formule">(2 × 22 + 8 × 10) ÷ 10 = (44 + 80) ÷ 10 = 12,40 €</span>
+    <p>Le réflexe à garder : <strong>recette totale ÷ nombre total de places</strong>. Chaque prix compte autant de fois qu'il y a de places à ce prix.</p>
+    <p><strong>La médiane</strong> : on <strong>trie</strong> les valeurs de la plus petite à la plus grande, puis on prend celle du milieu. S'il y a un nombre pair de valeurs, il y en a deux au milieu : on fait leur moyenne.</p>
+    <p><strong>Le mode</strong> : la valeur qui revient le plus souvent.</p>
+    <p>Moyenne et médiane ne racontent pas la même chose : un seul très gros cachet tire la moyenne vers le haut, alors que la médiane, elle, ne bouge presque pas.</p>`,
+  questions:[
+    {
+      type:"num",
+      contexte:"Cinq dates de tournée, temps de montage relevé à chaque fois.",
+      enonce:"Les durées de montage ont été de <strong>6,5 h</strong>, <strong>5 h</strong>, <strong>7,5 h</strong>, <strong>8 h</strong> et <strong>3 h</strong>. Quelle est la durée <strong>moyenne</strong> de montage ?",
+      unite:"heures",
+      reponse:6,
+      indice:"Additionne les cinq durées, puis partage ce total entre les cinq dates.",
+      explication:"6,5 + 5 + 7,5 + 8 + 3 = 30 h au total, pour 5 dates : 30 ÷ 5 = <span class='rep'>6 h</span> en moyenne. Remarque qu'aucune date n'a duré exactement 6 h : une moyenne est une valeur de répartition, pas forcément une valeur observée.",
+      rappel:"Moyenne = le total, partagé également entre toutes les valeurs."
+    },
+    {
+      type:"qcm",
+      contexte:"La même semaine de représentations, vue côté recette.",
+      enonce:"Sur la semaine complète, quel est le <strong>prix moyen</strong> d'une place vendue ?",
+      tableau:TAB_TARIFS,
+      options:["18,10 €","16,00 €","20,00 €","22,00 €"],
+      correct:0,
+      indice:"Combien la semaine a-t-elle rapporté en tout, et combien de places ont été vendues en tout ? Le prix moyen est le rapport entre ces deux nombres.",
+      explication:"Recette : 540 × 22 = 11 880 €, 270 × 16 = 4 320 €, 190 × 10 = 1 900 €, soit 18 100 € pour 1 000 places. 18 100 ÷ 1 000 = <span class='rep'>18,10 €</span>. La réponse 16,00 € est la moyenne des trois tarifs, (22 + 16 + 10) ÷ 3 : elle fait comme si les 190 places étudiantes pesaient autant que les 540 places pleines. 20,00 € s'obtient en oubliant la ligne étudiant, et 22,00 € est simplement le tarif le plus fréquent — c'est le mode, pas la moyenne.",
+      rappel:"Une moyenne pondérée n'est jamais la moyenne des prix : c'est le total divisé par le nombre total."
+    },
+    {
+      type:"num",
+      contexte:"Cachets versés à une équipe technique pour un service, en euros.",
+      enonce:"Huit personnes, huit cachets : <span class='mono'>150 · 120 · 260 · 110 · 140 · 95 · 130 · 180</span>. Quel est le cachet <strong>médian</strong> ?",
+      unite:"€",
+      reponse:135,
+      indice:"Première chose à faire, toujours : ranger les valeurs dans l'ordre croissant. Ensuite, avec huit valeurs, combien y en a-t-il exactement au milieu ?",
+      explication:"Triés : 95 · 110 · 120 · <strong>130 · 140</strong> · 150 · 180 · 260. Huit valeurs, donc deux au milieu : (130 + 140) ÷ 2 = <span class='rep'>135 €</span>. La moyenne, elle, vaut 148,13 € : le cachet de 260 € la tire vers le haut à lui tout seul. C'est exactement pour cette raison qu'on parle plutôt de salaire médian que de salaire moyen.",
+      rappel:"Médiane : on trie d'abord. Nombre pair de valeurs → moyenne des deux du milieu."
+    },
+    {
+      type:"qcm",
+      contexte:"Sept dates de montage, notées dans l'ordre du calendrier.",
+      enonce:"Durées relevées : <span class='mono'>5 · 9 · 4 · 12 · 6 · 5 · 8</span> (en heures). Quelle est la durée <strong>médiane</strong> ?",
+      options:["6 h","12 h","7 h","5 h"],
+      correct:0,
+      indice:"Les valeurs sont dans l'ordre du calendrier, pas dans l'ordre croissant. Que faut-il faire avant d'aller chercher celle du milieu ?",
+      explication:"Triées : 4 · 5 · 5 · <strong>6</strong> · 8 · 9 · 12. Sept valeurs : la quatrième est au milieu, la médiane vaut <span class='rep'>6 h</span>. La réponse 12 h est la valeur du milieu de la liste non triée — l'erreur numéro un. 7 h est la moyenne (49 ÷ 7) et 5 h est le mode, la durée qui revient deux fois.",
+      rappel:"Sans tri préalable, la médiane n'a aucun sens."
+    }
+  ]
+},
+{
+  titre:"La dispersion",
+  sous:"Étendue, quartiles, écart-type",
+  theorie:`
+    <h3>Avant de commencer</h3>
+    <p>Deux salles peuvent afficher la <strong>même moyenne</strong> et n'avoir rien à voir. L'une fait 180 spectateurs tous les soirs ; l'autre alterne les soirs à 60 et les soirs à 300. Même moyenne, deux réalités complètement différentes : ce qui les sépare, c'est la <strong>dispersion</strong>.</p>
+    <p><strong>L'étendue</strong> est la mesure la plus simple :</p>
+    <span class="formule">étendue = valeur la plus grande − valeur la plus petite</span>
+    <p><strong>L'écart-type</strong> mesure la même idée, en plus fin : il dit à quelle distance les valeurs se tiennent de la moyenne. <strong>Tu n'auras pas à le calculer à la main</strong> — il faut seulement savoir le lire : petit écart-type = série régulière, grand écart-type = série irrégulière.</p>
+    <p>Un exemple de plateau : l'équipe A monte le décor en 6 h en moyenne, écart-type 0,4 h ; l'équipe B en 5,8 h de moyenne, écart-type 2,1 h. Pour un planning de tournée serré, on prend l'équipe A : à peine plus lente, mais prévisible.</p>
+    <p><strong>Les quartiles</strong> coupent la série triée en quatre parts égales. On trie, on trouve la médiane, puis on prend la médiane de chaque moitié :</p>
+    <span class="formule">70 · 80 · 85 · [90] · 100 · 110 · 140
+médiane = 90    Q1 = 80    Q3 = 110</span>
+    <p>Un quart des valeurs sont sous <strong>Q1</strong>, la moitié sous la <strong>médiane</strong>, trois quarts sous <strong>Q3</strong>.</p>`,
+  questions:[
+    {
+      type:"num",
+      contexte:"Places vendues chaque soir, la semaine de l'étape 1.",
+      enonce:"Quelle est l'<strong>étendue</strong> de la fréquentation sur ces six soirées ?",
+      tableau:TAB_SOIRS,
+      unite:"places",
+      reponse:130,
+      indice:"L'étendue ne demande que deux nombres du tableau, et aucune addition. Lesquels ?",
+      explication:"Le meilleur soir, le samedi : 240 places. Le plus faible, le mardi : 110 places. 240 − 110 = <span class='rep'>130 places</span> d'écart entre les deux extrêmes.",
+      rappel:"Étendue = maximum − minimum. Elle donne l'amplitude d'une série, pas son niveau."
+    },
+    {
+      type:"qcm",
+      contexte:"Deux salles partenaires comparent leur saison.",
+      enonce:"Salle A : <span class='mono'>180 · 175 · 185 · 180 · 180</span>. Salle B : <span class='mono'>60 · 300 · 120 · 260 · 160</span>. Les deux ont exactement la même fréquentation moyenne, 180 spectateurs. Quelle conclusion est correcte ?",
+      options:[
+        "La salle A est bien plus régulière : ses valeurs s'écartent très peu de 180, son écart-type est petit.",
+        "Les deux salles se comportent de la même façon, puisque la moyenne est identique.",
+        "La salle B est plus régulière, puisqu'elle atteint des soirs à 300 spectateurs.",
+        "On ne peut pas comparer les deux salles sans connaître le prix des places."
+      ],
+      correct:0,
+      indice:"Regarde de combien chaque valeur s'éloigne de 180, dans une salle puis dans l'autre.",
+      explication:"Salle A : tout se joue entre 175 et 185, une étendue de 10. Salle B : entre 60 et 300, une étendue de 240. <span class='rep'>La salle A est bien plus régulière</span>, et c'est exactement ce que traduit un écart-type plus petit. La moyenne seule ne dit rien de cette différence : une salle qui ne remplit qu'un soir sur deux ne se pilote pas du tout comme une salle stable.",
+      rappel:"Deux séries de même moyenne peuvent être très différentes : la moyenne ne décrit jamais la dispersion."
+    },
+    {
+      type:"num",
+      contexte:"Durées des sept spectacles de la saison, déjà triées.",
+      enonce:"<span class='mono'>70 · 75 · 85 · 95 · 100 · 115 · 140</span> (en minutes). Quel est le <strong>premier quartile Q1</strong> ?",
+      unite:"minutes",
+      reponse:75,
+      indice:"Commence par la médiane : quelle valeur coupe la série en deux ? Refais ensuite exactement la même opération, mais sur la moitié de gauche uniquement.",
+      explication:"La médiane est 95 min, la quatrième valeur sur sept. La moitié basse est 70 · 75 · 85, et sa valeur du milieu vaut <span class='rep'>75 min</span>. Autrement dit : un quart des spectacles durent 75 minutes ou moins.",
+      rappel:"Q1 = la médiane de la moitié basse, une fois la série triée."
+    },
+    {
+      type:"qcm",
+      contexte:"Bilan de saison : 40 spectacles programmés.",
+      enonce:"La brochure indique <strong>Q1 = 85 min</strong>, <strong>médiane = 100 min</strong>, <strong>Q3 = 115 min</strong>. Quelle lecture est correcte ?",
+      options:[
+        "Un quart des spectacles durent 85 min ou moins, un quart durent 115 min ou plus, et la moitié se situent entre les deux.",
+        "Le spectacle le plus court dure 85 min et le plus long 115 min.",
+        "La durée moyenne des spectacles est de 100 min.",
+        "85 min et 115 min sont les deux durées les plus fréquentes."
+      ],
+      correct:0,
+      indice:"Les quartiles ne parlent ni des records, ni des valeurs les plus fréquentes : ils partagent la série triée en quatre paquets de même taille.",
+      explication:"Les quartiles découpent les 40 spectacles en quatre groupes de 10 : <span class='rep'>10 spectacles durent 85 min ou moins, 10 durent 115 min ou plus, et les 20 autres sont entre les deux</span>. Le plus court et le plus long ne sont pas donnés du tout (réponse 2). La médiane vaut bien 100 min, mais rien n'oblige la moyenne à valoir 100 (réponse 3). Et les durées les plus fréquentes, ce serait le mode (réponse 4).",
+      rappel:"Les quartiles décrivent des positions dans la série triée, pas des records ni des fréquences."
+    }
+  ]
+},
+{
+  titre:"Lire et critiquer un graphique",
+  sous:"Types de graphiques, taux de variation, pièges",
+  theorie:`
+    <h3>Avant de commencer</h3>
+    <p>Chaque type de graphique répond à une question différente :</p>
+    <ul>
+      <li><strong>barres</strong> — comparer des catégories entre elles (la recette de chaque soir) ;</li>
+      <li><strong>secteurs</strong> (le camembert) — montrer les parts d'un tout (la répartition du budget) ;</li>
+      <li><strong>courbe</strong> — suivre une évolution dans le temps (la fréquentation sur cinq saisons) ;</li>
+      <li><strong>nuage de points</strong> — chercher un lien entre deux grandeurs (le prix du billet et le taux de remplissage).</li>
+    </ul>
+    <p>Pour mesurer une évolution, on calcule le <strong>taux de variation</strong> :</p>
+    <span class="formule">taux = (valeur d'arrivée − valeur de départ) ÷ valeur de départ × 100</span>
+    <p>On divise <strong>toujours par la valeur de départ</strong> : passer de 8 000 à 9 200 spectateurs, c'est 1 200 ÷ 8 000 = 0,15, soit + 15 %.</p>
+    <p><strong>Et surtout : un graphique peut être exact et malhonnête en même temps.</strong> Trois pièges à connaître :</p>
+    <ul>
+      <li>l'<strong>axe vertical tronqué</strong> : s'il démarre à 80 au lieu de 0, la moindre hausse a l'air d'une explosion ;</li>
+      <li>le <strong>pourcentage pris pour un nombre</strong> : + 20 % dans une petite salle, ça peut faire 40 spectateurs ;</li>
+      <li>la <strong>corrélation prise pour une cause</strong> : deux choses qui augmentent en même temps n'ont pas forcément de lien.</li>
+    </ul>`,
+  questions:[
+    {
+      type:"num",
+      contexte:"Fréquentation annuelle de la salle, les cinq dernières saisons.",
+      enonce:"De la <strong>saison 4</strong> à la <strong>saison 5</strong>, de quel <strong>pourcentage</strong> la fréquentation a-t-elle augmenté ?",
+      tableau:FIG_SAISONS,
+      unite:"%",
+      reponse:15,
+      indice:"Commence par l'augmentation en nombre de spectateurs. Ensuite : cette augmentation, tu la rapportes à la valeur de départ ou à la valeur d'arrivée ?",
+      explication:"9 200 − 8 000 = 1 200 spectateurs de plus. Rapporté au point de départ : 1 200 ÷ 8 000 = 0,15, soit <span class='rep'>+ 15 %</span>. Si on divise par 9 200, la valeur d'arrivée, on trouve environ 13 % : c'est l'erreur la plus fréquente sur les taux de variation.",
+      rappel:"Un taux de variation se calcule toujours sur la valeur de départ."
+    },
+    {
+      type:"qcm",
+      contexte:"Affiche promotionnelle placardée à l'entrée du théâtre.",
+      enonce:"L'affiche annonce une <strong>fréquentation en explosion</strong> : le taux de remplissage passe de <strong>82 %</strong> à <strong>86 %</strong>, et la deuxième barre est trois fois plus haute que la première. Qu'en penses-tu ?",
+      tableau:FIG_TRONQUE,
+      options:[
+        "La hausse est réelle mais modeste — 4 points. L'effet spectaculaire vient de l'axe vertical qui démarre à 80 % au lieu de 0.",
+        "La hausse est bien spectaculaire : la barre est trois fois plus haute, donc la salle se remplit trois fois mieux.",
+        "Le graphique est faux : un taux de remplissage ne peut pas dépasser 80 %.",
+        "Le graphique est parfaitement neutre : les deux barres respectent les proportions."
+      ],
+      correct:0,
+      indice:"Regarde bien où commence l'axe vertical, à gauche du graphique. Que deviendraient les deux barres s'il partait de zéro ?",
+      explication:"Le remplissage passe de 82 % à 86 % : <span class='rep'>4 points de mieux</span>, une bonne nouvelle, mais pas une explosion. Comme l'axe démarre à 80 %, seule la partie au-dessus de 80 est dessinée : 2 points de haut pour la première barre, 6 pour la seconde, d'où ce rapport de 1 à 3. Avec un axe partant de 0, les deux barres seraient presque identiques.",
+      rappel:"Premier réflexe devant un graphique : vérifier où commence l'axe vertical."
+    },
+    {
+      type:"qcm",
+      contexte:"Réunion entre les directeurs de deux salles.",
+      enonce:"La <strong>salle A</strong> passe de <strong>200 à 240</strong> abonnés, la <strong>salle B</strong> de <strong>4 000 à 4 200</strong>. A affirme avoir « progressé quatre fois plus vite » ; B répond avoir « gagné cinq fois plus d'abonnés ». Qui a raison ?",
+      options:[
+        "Les deux. A a la plus forte hausse en pourcentage (+ 20 % contre + 5 %), B la plus forte hausse en nombre (+ 200 contre + 40).",
+        "A seulement : 20 % est plus grand que 5 %, donc A a gagné plus d'abonnés.",
+        "B seulement : + 200 abonnés, donc son pourcentage est forcément le plus élevé.",
+        "Aucun des deux : deux salles de tailles différentes ne se comparent pas."
+      ],
+      correct:0,
+      indice:"Calcule les deux hausses de deux façons : en nombre d'abonnés d'abord, en pourcentage ensuite. Est-ce que les deux classements désignent le même gagnant ?",
+      explication:"A gagne 40 abonnés, soit 40 ÷ 200 = <span class='rep'>+ 20 %</span>. B gagne 200 abonnés, soit 200 ÷ 4 000 = <span class='rep'>+ 5 %</span>. Les deux affirmations sont exactes : elles ne mesurent simplement pas la même chose. C'est le tour de passe-passe le plus courant dans une communication chiffrée — chacun choisit l'indicateur qui l'arrange.",
+      rappel:"Un pourcentage sans la valeur de départ ne dit pas grand-chose."
+    },
+    {
+      type:"qcm",
+      contexte:"Article dans la presse locale.",
+      enonce:"« Depuis que le théâtre a repeint son hall en rouge, la fréquentation a grimpé de 12 %. La couleur attire le public. » Que penser de cette conclusion ?",
+      options:[
+        "Elle va trop vite : les deux faits se produisent en même temps, mais rien ne montre que l'un cause l'autre — la programmation de la saison a changé, elle aussi.",
+        "Elle est valable, puisque la hausse suit immédiatement les travaux.",
+        "Elle est valable à condition que la hausse dépasse 10 %.",
+        "Elle est fausse, parce qu'une hausse de 12 % est trop faible pour être analysée."
+      ],
+      correct:0,
+      indice:"Qu'est-ce qui a pu changer d'autre au théâtre pendant cette même saison ? La peinture est-elle vraiment la seule explication possible ?",
+      explication:"Deux faits simultanés ne prouvent aucun lien de cause à effet : c'est ce qu'on appelle confondre <strong>corrélation</strong> et <strong>causalité</strong>. Ici, une nouvelle programmation, une tête d'affiche, un changement de tarif ou même la météo peuvent expliquer les 12 %. <span class='rep'>Pour attribuer la hausse à la peinture, il faudrait que tout le reste soit resté identique</span> — ce qui n'arrive à peu près jamais.",
+      rappel:"Deux courbes qui montent ensemble ne prouvent pas que l'une fait monter l'autre."
+    }
+  ]
+}
+];
+
+/* ============================================================
+   ÉTAT
+   ============================================================ */
+const state = {
+  level:0, q:0, attempts:0, hintUsed:false, answered:false,
+  results: LEVELS.map(l => new Array(l.questions.length).fill(null)),
+  feeling: LEVELS.map(() => null)
+};
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+  document.getElementById(id).classList.add('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goHub(){
+  renderHub();
+  showScreen('scr-hub');
+}
+
+function levelDone(i){
+  return state.results[i].every(r => r !== null);
+}
+
+function renderHub(){
+  const grid = document.getElementById('hub-grid');
+  grid.innerHTML = '';
+  LEVELS.forEach((lv,i) => {
+    const done = levelDone(i);
+    const btn = document.createElement('button');
+    btn.className = 'niveau-card' + (done ? ' done' : '');
+    let etat = 'À faire';
+    if(done){
+      const first = state.results[i].filter(r => r==='first').length;
+      etat = first + '/' + state.results[i].length + ' ✓';
+    }
+    btn.innerHTML =
+      '<span class="niveau-num">' + String(i+1).padStart(2,'0') + '</span>' +
+      '<span class="niveau-info"><strong>' + lv.titre + '</strong><span>' + lv.sous + '</span></span>' +
+      '<span class="niveau-etat">' + etat + '</span>';
+    btn.onclick = () => startLevel(i);
+    grid.appendChild(btn);
+  });
+
+  const nbDone = LEVELS.filter((_,i) => levelDone(i)).length;
+  document.getElementById('hub-progress').style.width = (nbDone / LEVELS.length * 100) + '%';
+  document.getElementById('hub-compteur').textContent = nbDone + ' / ' + LEVELS.length + ' étapes';
+  document.getElementById('btn-fiche').style.display = nbDone > 0 ? '' : 'none';
+}
+
+/* ============================================================
+   DÉROULÉ D'UN NIVEAU
+   ============================================================ */
+function startLevel(i){
+  state.level = i;
+  state.q = 0;
+  state.results[i] = new Array(LEVELS[i].questions.length).fill(null);
+  state.feeling[i] = null;
+  document.getElementById('niv-theorie').innerHTML =
+    '<div class="theorie">' + LEVELS[i].theorie + '</div>';
+  renderQuestion();
+  showScreen('scr-niveau');
+}
+
+function renderLeds(){
+  const box = document.getElementById('niv-leds');
+  box.innerHTML = '';
+  state.results[state.level].forEach((r,idx) => {
+    const d = document.createElement('span');
+    let cls = 'led';
+    if(r === 'first') cls += ' on-first';
+    else if(r === 'helped') cls += ' on-helped';
+    else if(r === 'shown') cls += ' on-shown';
+    else if(idx === state.q) cls += ' active';
+    d.className = cls;
+    box.appendChild(d);
+  });
+}
+
+function renderQuestion(){
+  const lv = LEVELS[state.level];
+  const q = lv.questions[state.q];
+  state.attempts = 0;
+  state.hintUsed = false;
+  state.answered = false;
+
+  document.getElementById('niv-label').textContent =
+    'Étape ' + (state.level+1) + ' · ' + lv.titre;
+  document.getElementById('q-compteur').textContent =
+    'Question ' + (state.q+1) + ' sur ' + lv.questions.length;
+  document.getElementById('q-contexte').innerHTML =
+    q.contexte ? '<div class="q-contexte">' + q.contexte + '</div>' : '';
+  document.getElementById('q-enonce').innerHTML = q.enonce;
+  document.getElementById('q-tableau').innerHTML = q.tableau || '';
+  document.getElementById('q-feedback').innerHTML = '';
+  renderLeds();
+
+  const zone = document.getElementById('q-zone');
+  zone.innerHTML = '';
+
+  if(q.type === 'qcm'){
+    const box = document.createElement('div');
+    box.className = 'options';
+    q.options.forEach((opt,idx) => {
+      const b = document.createElement('button');
+      b.className = 'option';
+      b.innerHTML = opt;
+      b.onclick = () => checkQcm(idx,b);
+      box.appendChild(b);
+    });
+    zone.appendChild(box);
+  } else {
+    zone.innerHTML =
+      '<div class="num-zone">' +
+        '<div class="num-field">' +
+          '<input type="text" inputmode="decimal" class="num-input" id="num-input" ' +
+            'placeholder="Ta réponse — tu peux aussi taper un calcul" autocomplete="off">' +
+          '<div class="calc-preview" id="calc-preview"></div>' +
+        '</div>' +
+        (q.unite ? '<div class="unite">' + q.unite + '</div>' : '') +
+      '</div>';
+    const input = document.getElementById('num-input');
+    input.addEventListener('input', updatePreview);
+    input.addEventListener('keydown', e => {
+      if(e.key === 'Enter' && !state.answered) checkNum();
+    });
+    setTimeout(() => input.focus(), 120);
+  }
+
+  renderActions();
+}
+
+function renderActions(){
+  const q = LEVELS[state.level].questions[state.q];
+  const box = document.getElementById('q-actions');
+  box.innerHTML = '';
+
+  if(state.answered){
+    const b = document.createElement('button');
+    b.className = 'btn';
+    const last = state.q === LEVELS[state.level].questions.length - 1;
+    b.textContent = last ? 'Voir le bilan de l\u2019étape ➜' : 'Question suivante ➜';
+    b.onclick = nextQuestion;
+    box.appendChild(b);
+    return;
+  }
+
+  if(q.type === 'num'){
+    const v = document.createElement('button');
+    v.className = 'btn';
+    v.textContent = 'Vérifier';
+    v.onclick = checkNum;
+    box.appendChild(v);
+  }
+  if(!state.hintUsed){
+    const h = document.createElement('button');
+    h.className = 'btn btn-ghost btn-sm';
+    h.textContent = 'Un indice';
+    h.onclick = showHint;
+    box.appendChild(h);
+  }
+}
+
+function showHint(){
+  const q = LEVELS[state.level].questions[state.q];
+  state.hintUsed = true;
+  document.getElementById('q-feedback').innerHTML =
+    '<div class="feedback hint"><strong>Un coup de pouce</strong>' + q.indice + '</div>';
+  renderActions();
+}
+
+/* ---------- QCM ---------- */
+function checkQcm(idx, btn){
+  if(state.answered) return;
+  const q = LEVELS[state.level].questions[state.q];
+  const buttons = document.querySelectorAll('#q-zone .option');
+  buttons.forEach(b => b.disabled = true);
+  state.answered = true;
+
+  if(idx === q.correct){
+    btn.classList.add('correct');
+    state.results[state.level][state.q] = state.hintUsed ? 'helped' : 'first';
+    document.getElementById('q-feedback').innerHTML =
+      '<div class="feedback ok"><strong>C\u2019est ça.</strong>' + q.explication +
+      '<br><br><em>' + q.rappel + '</em></div>';
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    state.results[state.level][state.q] = 'shown';
+    document.getElementById('q-feedback').innerHTML =
+      '<div class="feedback show"><strong>Pas celle-là — regarde pourquoi</strong>' + q.explication +
+      '<br><br><em>' + q.rappel + '</em></div>';
+  }
+  renderLeds();
+  renderActions();
+}
+
+/* ---------- Numérique ---------- */
+function checkNum(){
+  if(state.answered) return;
+  const q = LEVELS[state.level].questions[state.q];
+  const input = document.getElementById('num-input');
+  const raw = input.value.trim();
+  if(raw === '') { input.focus(); return; }
+
+  const val = evaluate(raw);
+  const fb = document.getElementById('q-feedback');
+
+  if(val !== null && Math.abs(val - q.reponse) <= 0.02){
+    input.classList.add('correct');
+    input.disabled = true;
+    state.answered = true;
+    state.results[state.level][state.q] =
+      (state.attempts === 0 && !state.hintUsed) ? 'first' : 'helped';
+    fb.innerHTML = '<div class="feedback ok"><strong>C\u2019est ça.</strong>' + q.explication +
+      '<br><br><em>' + q.rappel + '</em></div>';
+  } else {
+    state.attempts++;
+    input.classList.add('wrong');
+    setTimeout(() => input.classList.remove('wrong'), 900);
+    if(state.attempts === 1){
+      state.hintUsed = true;
+      fb.innerHTML = '<div class="feedback hint"><strong>Pas encore — essaie encore une fois</strong>' +
+        q.indice + '</div>';
+      input.select();
+    } else {
+      input.disabled = true;
+      state.answered = true;
+      state.results[state.level][state.q] = 'shown';
+      fb.innerHTML = '<div class="feedback show"><strong>Je te montre le chemin</strong>' +
+        q.explication + '<br><br><em>' + q.rappel + '</em></div>';
+    }
+  }
+  renderLeds();
+  renderActions();
+}
+
+function nextQuestion(){
+  if(state.q < LEVELS[state.level].questions.length - 1){
+    state.q++;
+    renderQuestion();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    showBilan();
+  }
+}
+
+/* ============================================================
+   MINI-CALCULATRICE (aperçu en direct)
+   ============================================================ */
+function updatePreview(){
+  const raw = this.value;
+  const prev = document.getElementById('calc-preview');
+  if(!/[+\-*/×÷()]/.test(raw.replace(/^-/,''))){ prev.textContent = ''; return; }
+  const val = evaluate(raw);
+  prev.textContent = (val === null) ? '' : '= ' + fmt(val);
+}
+
+function fmt(n){
+  const r = Math.round(n * 1000) / 1000;
+  return String(r).replace('.', ',');
+}
+
+/* Évaluateur d'expressions — analyse descendante, sans eval() */
+function evaluate(str){
+  const s = str.replace(/\s/g,'').replace(/×/g,'*').replace(/÷/g,'/').replace(/,/g,'.');
+  if(s === '' || !/^[0-9+\-*/().]+$/.test(s)) return null;
+  let pos = 0;
+  function peek(){ return s[pos]; }
+  function expr(){
+    let v = term();
+    if(v === null) return null;
+    while(peek() === '+' || peek() === '-'){
+      const op = s[pos++]; const r = term();
+      if(r === null) return null;
+      v = (op === '+') ? v + r : v - r;
+    }
+    return v;
+  }
+  function term(){
+    let v = factor();
+    if(v === null) return null;
+    while(peek() === '*' || peek() === '/'){
+      const op = s[pos++]; const r = factor();
+      if(r === null) return null;
+      if(op === '/' && r === 0) return null;
+      v = (op === '*') ? v * r : v / r;
+    }
+    return v;
+  }
+  function factor(){
+    if(peek() === '+'){ pos++; return factor(); }
+    if(peek() === '-'){ pos++; const v = factor(); return v === null ? null : -v; }
+    if(peek() === '('){
+      pos++; const v = expr();
+      if(peek() !== ')') return null;
+      pos++; return v;
+    }
+    let start = pos;
+    while(pos < s.length && /[0-9.]/.test(s[pos])) pos++;
+    if(start === pos) return null;
+    const n = parseFloat(s.slice(start,pos));
+    return isNaN(n) ? null : n;
+  }
+  const result = expr();
+  if(result === null || pos !== s.length || !isFinite(result)) return null;
+  return result;
+}
+
+/* ============================================================
+   BILAN DE NIVEAU
+   ============================================================ */
+function compte(arr){
+  return {
+    first: arr.filter(r => r==='first').length,
+    helped: arr.filter(r => r==='helped').length,
+    shown: arr.filter(r => r==='shown').length,
+    total: arr.length
+  };
+}
+
+function showBilan(){
+  const i = state.level;
+  const c = compte(state.results[i]);
+  const pct = Math.round(c.first / c.total * 100);
+
+  document.getElementById('bil-eyebrow').textContent =
+    'Étape ' + (i+1) + ' terminée · ' + LEVELS[i].titre;
+
+  let med, grade, msg;
+  if(pct >= 85){ med='🏆'; grade='A — Excellent'; msg="C'est solide. Ce thème ne demandera pas de temps supplémentaire pendant les séances de cours."; }
+  else if(pct >= 65){ med='🥇'; grade='B — Très bien'; msg="Les mécanismes sont là. Un ou deux points à consolider, rien de plus."; }
+  else if(pct >= 45){ med='🥈'; grade='C — Satisfaisant'; msg="La base est présente mais encore hésitante. Ce thème mérite un passage en cours — c'est exactement le genre de chose qui se débloque en vingt minutes à deux."; }
+  else { med='🥉'; grade='D — À reprendre'; msg="Ce thème demande une remise à plat, et c'est parfaitement normal après une longue pause. L'avoir repéré maintenant, c'est du temps gagné."; }
+
+  document.getElementById('bil-medaille').textContent = med;
+  document.getElementById('bil-grade').textContent = grade + ' · ' + pct + '% trouvé seule';
+  document.getElementById('bil-message').textContent = msg;
+
+  document.getElementById('bil-stats').innerHTML =
+    '<div class="stat v"><span class="val">' + c.first + '</span><span class="lab">trouvé seule</span></div>' +
+    '<div class="stat o"><span class="val">' + c.helped + '</span><span class="lab">avec un coup de main</span></div>' +
+    '<div class="stat r"><span class="val">' + c.shown + '</span><span class="lab">réponse montrée</span></div>';
+
+  const rz = document.getElementById('bil-ressenti');
+  rz.innerHTML = '';
+  [['ok','😊','Ça va'],['moyen','😐','Moyen'],['revoir','😕','À revoir']].forEach(([k,e,l]) => {
+    const b = document.createElement('button');
+    b.className = 'r-btn' + (state.feeling[i]===k ? ' sel' : '');
+    b.innerHTML = '<span class="emo">' + e + '</span>' + l;
+    b.onclick = () => { state.feeling[i] = k; showBilan(); };
+    rz.appendChild(b);
+  });
+
+  const next = document.getElementById('bil-suivant');
+  const last = i === LEVELS.length - 1;
+  next.textContent = last ? 'Voir ma fiche de synthèse ➜' : 'Étape suivante ➜';
+  next.onclick = () => { if(last) showFinal(); else startLevel(i+1); };
+  document.getElementById('bil-recommencer').onclick = () => startLevel(i);
+
+  showScreen('scr-bilan');
+  if(pct >= 70) confetti();
+}
+
+/* ============================================================
+   FICHE DE SYNTHÈSE FINALE
+   ============================================================ */
+function showFinal(){
+  const faits = LEVELS.map((_,i) => i).filter(i => levelDone(i));
+  let tf=0, th=0, ts=0, tt=0;
+  faits.forEach(i => { const c = compte(state.results[i]); tf+=c.first; th+=c.helped; ts+=c.shown; tt+=c.total; });
+  const pct = tt ? Math.round(tf/tt*100) : 0;
+
+  document.getElementById('fin-lead').textContent =
+    faits.length < LEVELS.length
+      ? 'Fiche provisoire : ' + faits.length + ' étape(s) sur ' + LEVELS.length + ' terminée(s). Tu peux revenir la compléter.'
+      : 'Module terminé — ' + pct + '% des questions trouvées sans aide. Cette fiche indique où passer le temps des deux séances de cours.';
+
+  document.getElementById('fin-stats').innerHTML =
+    '<div class="stat v"><span class="val">' + tf + '</span><span class="lab">trouvé seule</span></div>' +
+    '<div class="stat o"><span class="val">' + th + '</span><span class="lab">avec un coup de main</span></div>' +
+    '<div class="stat r"><span class="val">' + ts + '</span><span class="lab">réponse montrée</span></div>';
+
+  const tb = document.getElementById('fin-tbody');
+  tb.innerHTML = '';
+  const prio = [];
+
+  LEVELS.forEach((lv,i) => {
+    const tr = document.createElement('tr');
+    if(!levelDone(i)){
+      tr.innerHTML = '<td class="theme">' + lv.titre + '</td>' +
+        '<td class="score">—</td><td>—</td><td><span class="verdict fragile">Pas encore fait</span></td>';
+      tb.appendChild(tr);
+      return;
+    }
+    const c = compte(state.results[i]);
+    const p = Math.round(c.first/c.total*100);
+    const f = state.feeling[i];
+    const fLabel = f==='ok' ? '😊 Ça va' : f==='moyen' ? '😐 Moyen' : f==='revoir' ? '😕 À revoir' : '—';
+
+    let vClass, vText;
+    if(p >= 75 && f !== 'revoir'){ vClass='acquis'; vText='Acquis'; }
+    else if(p >= 50 && f !== 'revoir'){ vClass='fragile'; vText='À consolider'; }
+    else { vClass='prio'; vText='Priorité'; prio.push(lv.titre); }
+
+    tr.innerHTML = '<td class="theme">' + lv.titre + '</td>' +
+      '<td class="score">' + c.first + '/' + c.total + '</td>' +
+      '<td>' + fLabel + '</td>' +
+      '<td><span class="verdict ' + vClass + '">' + vText + '</span></td>';
+    tb.appendChild(tr);
+  });
+
+  const pz = document.getElementById('fin-priorites');
+  if(prio.length){
+    pz.innerHTML = '<div class="note-doux" style="margin-top:20px"><strong>À mettre sur la table au début du cours :</strong> ' +
+      prio.join(', ') + '. Le reste peut être survolé rapidement.</div>';
+  } else if(faits.length === LEVELS.length){
+    pz.innerHTML = '<div class="note-doux" style="margin-top:20px"><strong>Aucune priorité rouge.</strong> ' +
+      'Les statistiques et la lecture de graphiques tiennent — c\u2019est la partie que le test évalue le plus directement. ' +
+      'Le temps de cours peut aller vers les thèmes suivants : algèbre, second degré et fonctions.</div>';
+  } else {
+    pz.innerHTML = '';
+  }
+
+  showScreen('scr-final');
+  if(faits.length === LEVELS.length && pct >= 70) confetti();
+}
+
+function resetAll(){
+  state.results = LEVELS.map(l => new Array(l.questions.length).fill(null));
+  state.feeling = LEVELS.map(() => null);
+  goHub();
+}
+
+/* ============================================================
+   CONFETTIS
+   ============================================================ */
+function confetti(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = document.getElementById('confetti');
+  const cols = ['#3fc9a8','#f0a85c','#4ade80','#eef2f8','#7dd3fc'];
+  for(let i=0;i<46;i++){
+    const c = document.createElement('i');
+    c.className = 'conf';
+    c.style.left = Math.random()*100 + '%';
+    c.style.background = cols[Math.floor(Math.random()*cols.length)];
+    c.style.animationDuration = (1.9 + Math.random()*1.5) + 's';
+    c.style.animationDelay = (Math.random()*0.5) + 's';
+    box.appendChild(c);
+    setTimeout(() => c.remove(), 4200);
+  }
+}
+</script>
+
+</body>
+</html>
